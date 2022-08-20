@@ -8,7 +8,7 @@ import BaseRoutes from './routes';
 function App() {
   return (
     <BrowserRouter>
-      <ChakraProvider>
+      <ChakraProvider >
         <SidebarWithHeader>
           <BaseRoutes />
         </SidebarWithHeader>
