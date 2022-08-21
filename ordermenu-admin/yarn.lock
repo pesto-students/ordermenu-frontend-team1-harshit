@@ -2663,6 +2663,11 @@
   "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.182.tgz"
   "version" "4.14.182"
 
+"@types/lodash@^4.14.175":
+  version "4.14.184"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.184.tgz#23f96cd2a21a28e106dc24d825d4aa966de7a9fe"
+  integrity sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==
+
 "@types/mime@*":
   "version" "3.0.1"
 
@@ -4407,6 +4412,7 @@
   "integrity" "sha512-EgqGeaBB8hLiHLZtp/IbaDQTL8pZ0+IvwzSHA6d7VyMDM+B9hgddEMa9xjK5oYnw0ci0JQ6g2XCD7/f6cafU6g=="
   "resolved" "https://registry.npmjs.org/dns-packet/-/dns-packet-5.4.0.tgz"
   "version" "5.4.0"
+
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
