@@ -4,3 +4,4 @@ export { default as RestaurantDetailsPage } from "./restaurant/RestaurantDetails
 export { default as SettingsPage } from "./settings/SettingsPage"
 export { default as CategoriesPage } from "./menu/CategoriesPage"
 export { default as ProductsPage } from "./menu/ProductsPage"
+export { default as TablesPage } from "./tables/TablesPage"

@@ -28,6 +28,7 @@ import {
   RiRestaurant2Line,
   RiSettings4Line,
   RiPassportLine,
+  RiTable2
 } from "react-icons/ri"
 import { Link, Outlet } from "react-router-dom"
 import { useLocation } from "react-router-dom"
@@ -47,6 +48,7 @@ const LinkItems = [
       },
     ],
   },
+  { name: 'Tables', icon: RiTable2, path: '/tables' },
   { name: "Orders", icon: RiShoppingCart2Line, path: "/orders" },
   {
     name: "Reaturant Details",
@@ -102,7 +104,7 @@ const SidebarWithHeader = () => {
     return (
       <div>
         <Link
-          to={subLinks && subLinks.length > 0 ? path + subLinks[0]?.path : path}
+          to={subLinks && subLinks.length > 0 ? subLinks[0]?.path : path}
           style={{ textDecoration: "none" }}
           _focus={{ boxShadow: "none" }}
         >
