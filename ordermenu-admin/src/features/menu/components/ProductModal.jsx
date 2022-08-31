@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { Button, Modal, ModalOverlay, useDisclosure, ModalContent, ModalBody, ModalCloseButton, ModalHeader, Text, FormControl, FormLabel, Input, FormErrorMessage, Flex } from '@chakra-ui/react'
+import { Box, Button, Modal, ModalOverlay, useDisclosure, ModalContent, ModalBody, ModalCloseButton, ModalHeader, Text, FormControl, FormLabel, Input, FormErrorMessage, Flex } from '@chakra-ui/react'
 
 const ProductModal = () => {
   const [sizes, setSizes] = useState([])
@@ -22,7 +22,7 @@ const ProductModal = () => {
   })
 
   return (
-    <>
+    <Box>
       <Button colorScheme='green' onClick={onOpen}>Add Product</Button>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -192,7 +192,7 @@ const ProductModal = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </Box>
   )
 }
 

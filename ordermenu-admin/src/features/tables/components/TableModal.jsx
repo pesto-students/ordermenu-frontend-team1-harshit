@@ -1,9 +1,9 @@
 import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { Box, Button, Modal, ModalOverlay, useDisclosure, ModalContent, ModalBody, ModalCloseButton, ModalHeader, Text, FormControl, FormLabel, Input, FormErrorMessage, Flex } from '@chakra-ui/react'
+import { Button, Modal, ModalOverlay, useDisclosure, ModalContent, ModalBody, ModalCloseButton, ModalHeader, Text, FormControl, FormLabel, Input, FormErrorMessage, Flex } from '@chakra-ui/react'
 
-const CategoryModal = () => {
+const TableModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const CategorySchema = Yup.object().shape({
@@ -18,13 +18,13 @@ const CategoryModal = () => {
   })
 
   return (
-    <Box>
-      <Button colorScheme='green' onClick={onOpen}>Add Category</Button>
+    <div>
+      <Button colorScheme='green' onClick={onOpen}>Add Table</Button>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create a new category</ModalHeader>
+          <ModalHeader>Create a new table</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text></Text>
@@ -40,30 +40,12 @@ const CategoryModal = () => {
             >
               {(props) => (
                 <Form>
-                  <Field name='name'>
+                  <Field name='number'>
                     {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.name && form.touched.name}>
-                        <FormLabel>Name</FormLabel>
-                        <Input {...field} placeholder='Classic Smoothies' />
-                        <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name='description'>
-                    {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.description && form.touched.description} mt={4}>
-                        <FormLabel>Description</FormLabel>
-                        <Input {...field} placeholder='Classic smoothies are great.' />
-                        <FormErrorMessage>{form.errors.description}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name='image'>
-                    {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.image && form.touched.image} mt={4}>
-                        <FormLabel>Image</FormLabel>
-                        <Input {...field} type='file' placeholder='Classic smoothies are great.' />
-                        <FormErrorMessage>{form.errors.image}</FormErrorMessage>
+                      <FormControl isInvalid={form.errors.number && form.touched.number}>
+                        <FormLabel>Number</FormLabel>
+                        <Input {...field} placeholder='4' type="number" />
+                        <FormErrorMessage>{form.errors.number}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -81,7 +63,7 @@ const CategoryModal = () => {
                       isLoading={props.isSubmitting}
                       type='submit'
                     >
-                      Add Category
+                      Add Table
                     </Button>
                   </Flex>
                 </Form>
@@ -90,8 +72,8 @@ const CategoryModal = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </Box>
+    </div>
   )
 }
 
-export default CategoryModal
+export default TableModal

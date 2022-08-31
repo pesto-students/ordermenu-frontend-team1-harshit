@@ -9,6 +9,7 @@ import {
   OrdersPage,
   RestaurantDetailsPage,
   SettingsPage,
+  TablesPage,
 } from "../features/index"
 import Login from "../features/login/Login"
 import Register from "../features/register/Register"
@@ -21,7 +22,8 @@ const BaseRoutes = () => {
       <Route element={<SidebarWithHeader />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/menu/categories" element={<CategoriesPage />} />
-        <Route path="/menu/products" element={<ProductsPage />} />
+        <Route path="/menu/food-drinks" element={<ProductsPage />} />
+        <Route path="/tables" element={<TablesPage />} />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/restaurant-details" element={<RestaurantDetailsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
