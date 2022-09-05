@@ -19,8 +19,23 @@ import {
     Divider,
 } from '@chakra-ui/react'
 import { FiShoppingCart } from 'react-icons/fi'
+import { useSelector } from "react-redux";
+
+import { selectProducts } from 'src/store/cartSlice'
+import { selectPartner } from 'src/store/partnerSlice'
+import { CartProductCard } from '.';
 
 const CheckoutModal = () => {
+    const partner = useSelector(selectPartner)
+    const products = useSelector(selectProducts)
+    const calculateTotal = (products) => {
+        let total = 0;
+
+        products.map((product) => { total += (product?.price + (product?.size?.price || 0) + (product?.extra?.price || 0)) * product?.quantity; })
+
+        return total
+    }
+
     return (
         <Popover placement='bottom-end'>
             <PopoverTrigger>
@@ -37,93 +52,32 @@ const CheckoutModal = () => {
                 <PopoverCloseButton />
                 <PopoverBody>
                     <Flex gap={4} align="center">
-                        <Image src={'https://picsum.photos/200'} width={useBreakpointValue({ base: '4rem', md: '5rem' })} alt={''} borderRadius={'50%'} />
+                        <Image src={partner?.logo} width={useBreakpointValue({ base: '4rem', md: '5rem' })} height={useBreakpointValue({ base: '4rem', md: '5rem' })} alt={partner?.name} borderRadius={'50%'} />
                         <Box>
-                            <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')}>Cafe Milano</Text>
-                            <Text fontSize="sm" color='gray.500'>935 Addison Street, Berkeley, CA 94704, USA</Text>
+                            <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')}>{partner?.name}</Text>
+                            <Text fontSize="sm" color='gray.500'>{partner?.address}</Text>
                         </Box>
                     </Flex>
                     <Divider my={4} />
-                    <Flex flexDirection="column" gap={2}>
-                        <Box>
-                            <Flex justify='space-between'>
-                                <Text fontWeight='semibold' noOfLines={1}>
-                                    Bagel With Smoked Salmon Bagel With
-                                </Text>
-                                <Text fontWeight='semibold' width='20%' textAlign='right'>
-                                    ₹ 420
-                                </Text>
-                            </Flex>
-                            <Flex justify='space-between' mt={1}>
-                                <Text fontSize="xs" color='gray.500' noOfLines={1}>
-                                    Medium
-                                </Text>
-                                <Text fontSize="xs" color='gray.500' width='20%' textAlign='right'>
-                                    ₹ 40
-                                </Text>
-                            </Flex>
-                            <Flex justify='space-between' mt={1}>
-                                <Text fontSize="xs" color='gray.500' noOfLines={1}>
-                                    Almond Milk
-                                </Text>
-                                <Text fontSize="xs" color='gray.500' width='20%' textAlign='right'>
-                                    ₹ 40
-                                </Text>
-                            </Flex>
-                            <Flex justify='space-between' mt={1}>
-                                <Text fontSize="xs" fontWeight="semibold" color='gray.500' noOfLines={1}>
-                                    Quantity
-                                </Text>
-                                <Text fontSize="xs" fontWeight="semibold" color='gray.500' width='20%' textAlign='right'>
-                                    X 1
-                                </Text>
-                            </Flex>
-                        </Box>
 
-                        <Box>
+                    {
+                        products?.length > 0 ? <><Flex flexDirection="column" gap={2}>
+
+                            {
+                                products?.map((product) => <CartProductCard key={product?._id} product={product} />)
+                            }
+                        </Flex>
+                            <Divider my={4} />
                             <Flex justify='space-between'>
-                                <Text fontWeight='semibold' noOfLines={1}>
-                                    Red Velvet Shakes
+                                <Text fontWeight='semibold'>
+                                    Subtotal
                                 </Text>
                                 <Text fontWeight='semibold' width='20%' textAlign='right'>
-                                    ₹ 420
+                                    ₹ {calculateTotal(products)}
                                 </Text>
-                            </Flex>
-                            <Flex justify='space-between' mt={1}>
-                                <Text fontSize="xs" color='gray.500' noOfLines={1}>
-                                    Medium
-                                </Text>
-                                <Text fontSize="xs" color='gray.500' width='20%' textAlign='right'>
-                                    ₹ 40
-                                </Text>
-                            </Flex>
-                            <Flex justify='space-between' mt={1}>
-                                <Text fontSize="xs" color='gray.500' noOfLines={1}>
-                                    Almond Milk
-                                </Text>
-                                <Text fontSize="xs" color='gray.500' width='20%' textAlign='right'>
-                                    ₹ 40
-                                </Text>
-                            </Flex>
-                            <Flex justify='space-between' mt={1}>
-                                <Text fontSize="xs" fontWeight="semibold" color='gray.500' noOfLines={1}>
-                                    Quantity
-                                </Text>
-                                <Text fontSize="xs" fontWeight="semibold" color='gray.500' width='20%' textAlign='right'>
-                                    X 2
-                                </Text>
-                            </Flex>
-                        </Box>
-                    </Flex>
-                    <Divider my={4} />
-                    <Flex justify='space-between'>
-                        <Text fontWeight='semibold'>
-                            Subtotal
-                        </Text>
-                        <Text fontWeight='semibold' width='20%' textAlign='right'>
-                            ₹ 1500
-                        </Text>
-                    </Flex>
+                            </Flex></> : <Flex><Text>Your cart is empty.</Text></Flex>
+                    }
+
                     <Button width='100%' mt={4} colorScheme='brand'>Checkout</Button>
                 </PopoverBody>
             </PopoverContent>
