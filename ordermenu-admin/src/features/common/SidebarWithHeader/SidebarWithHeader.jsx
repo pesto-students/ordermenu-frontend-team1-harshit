@@ -28,7 +28,7 @@ import {
   RiRestaurant2Line,
   RiSettings4Line,
   RiPassportLine,
-  RiTable2
+  RiTable2,
 } from "react-icons/ri"
 import { Link, Outlet } from "react-router-dom"
 import { useLocation } from "react-router-dom"
@@ -48,7 +48,7 @@ const LinkItems = [
       },
     ],
   },
-  { name: 'Tables', icon: RiTable2, path: '/tables' },
+  { name: "Tables", icon: RiTable2, path: "/tables" },
   { name: "Orders", icon: RiShoppingCart2Line, path: "/orders" },
   {
     name: "Reaturant Details",
@@ -61,8 +61,6 @@ const LinkItems = [
 const SidebarWithHeader = () => {
   const location = useLocation()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  console.log("Location", location)
 
   const SidebarContent = ({ onClose, ...rest }) => {
     return (

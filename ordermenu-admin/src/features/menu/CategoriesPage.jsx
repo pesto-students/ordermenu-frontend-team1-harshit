@@ -11,18 +11,25 @@ import { Center, Text } from "@chakra-ui/react"
 import { FiChevronRight } from "react-icons/fi"
 import CategoryModal from "./components/CategoryModal"
 import CategoryCard from "./components/CategoryCard"
-import { useAuth } from "../../context/AuthContext"
 import { useEffect } from "react"
 import axios from "axios"
 import config from "../../config"
 
 const CategoriesPage = () => {
-  const { authState, setAuthState } = useAuth()
   const [categories, setCategories] = useState([])
+  const [newCategory, setNewCategory] = useState({})
 
   useEffect(() => {
     getCategories()
   }, [])
+
+  useEffect(() => {
+    if (Object.keys(newCategory).length === 0) {
+      return
+    }
+    setCategories((prev) => [...prev, newCategory])
+    setNewCategory({})
+  }, [newCategory])
 
   async function getCategories() {
     try {
@@ -54,7 +61,7 @@ const CategoriesPage = () => {
           </BreadcrumbItem>
         </Breadcrumb>
 
-        <CategoryModal />
+        <CategoryModal setNewCategory={setNewCategory} />
       </Flex>
 
       {categories.length === 0 ? (
@@ -73,18 +80,18 @@ const CategoriesPage = () => {
           }}
           gap={4}
         >
-          <GridItem>
-            <CategoryCard />
-          </GridItem>
-          <GridItem>
-            <CategoryCard />
-          </GridItem>
-          <GridItem>
-            <CategoryCard />
-          </GridItem>
-          <GridItem>
-            <CategoryCard />
-          </GridItem>
+          {categories.map(({ name, description, image, _id }) => {
+            return (
+              <GridItem key={_id}>
+                <CategoryCard
+                  id={_id}
+                  name={name}
+                  description={description}
+                  image={image}
+                />
+              </GridItem>
+            )
+          })}
         </Grid>
       )}
     </>

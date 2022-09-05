@@ -1,25 +1,45 @@
-import React from 'react'
-import { Formik, Form, Field } from 'formik'
-import * as Yup from 'yup'
-import { Box, Button, Modal, ModalOverlay, useDisclosure, ModalContent, ModalBody, ModalCloseButton, ModalHeader, Text, FormControl, FormLabel, Input, FormErrorMessage, Flex } from '@chakra-ui/react'
+import React from "react"
+import { Formik, Form, Field } from "formik"
+import * as Yup from "yup"
+import {
+  Box,
+  Button,
+  Modal,
+  ModalOverlay,
+  useDisclosure,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  ModalHeader,
+  Text,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  Flex,
+} from "@chakra-ui/react"
+import config from "../../../config"
+import axios from "axios"
 
-const CategoryModal = () => {
+const CategoryModal = ({ setNewCategory }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const CategorySchema = Yup.object().shape({
     name: Yup.string()
-      .min(3, 'Too Short!')
-      .max(30, 'Too Long!')
-      .required('Required'),
+      .min(3, "Too Short!")
+      .max(30, "Too Long!")
+      .required("Required"),
     description: Yup.string()
-      .min(3, 'Too Short!')
-      .max(120, 'Too Long!')
-      .required('Required'),
+      .min(3, "Too Short!")
+      .max(120, "Too Long!")
+      .required("Required"),
   })
 
   return (
     <Box>
-      <Button colorScheme='green' onClick={onOpen}>Add Category</Button>
+      <Button colorScheme="green" onClick={onOpen}>
+        Add Category
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
@@ -29,57 +49,84 @@ const CategoryModal = () => {
           <ModalBody>
             <Text></Text>
             <Formik
-              initialValues={{ name: '', description: '', image: '' }}
+              initialValues={{ name: "", description: "", image: "" }}
               validationSchema={CategorySchema}
-              onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2))
-                  actions.setSubmitting(false)
-                }, 1000)
+              onSubmit={async (values, actions) => {
+                try {
+                  const { status, data } = await axios.post(
+                    `${config.URL}/api/v1/categories`,
+                    values,
+                    { withCredentials: true }
+                  )
+                  if (status === 200) {
+                    // actions.setSubmitting(false)
+                    setNewCategory(data)
+                    onClose()
+                  }
+                } catch (err) {
+                  console.log(err)
+                  onClose()
+                }
+                //
               }}
             >
               {(props) => (
                 <Form>
-                  <Field name='name'>
+                  <Field name="name">
                     {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.name && form.touched.name}>
+                      <FormControl
+                        isInvalid={form.errors.name && form.touched.name}
+                      >
                         <FormLabel>Name</FormLabel>
-                        <Input {...field} placeholder='Classic Smoothies' />
+                        <Input {...field} placeholder="Classic Smoothies" />
                         <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
-                  <Field name='description'>
+                  <Field name="description">
                     {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.description && form.touched.description} mt={4}>
+                      <FormControl
+                        isInvalid={
+                          form.errors.description && form.touched.description
+                        }
+                        mt={4}
+                      >
                         <FormLabel>Description</FormLabel>
-                        <Input {...field} placeholder='Classic smoothies are great.' />
-                        <FormErrorMessage>{form.errors.description}</FormErrorMessage>
+                        <Input
+                          {...field}
+                          placeholder="Classic smoothies are great."
+                        />
+                        <FormErrorMessage>
+                          {form.errors.description}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
-                  <Field name='image'>
+                  <Field name="image">
                     {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.image && form.touched.image} mt={4}>
+                      <FormControl
+                        isInvalid={form.errors.image && form.touched.image}
+                        mt={4}
+                      >
                         <FormLabel>Image</FormLabel>
-                        <Input {...field} type='file' placeholder='Classic smoothies are great.' />
+                        <Input
+                          {...field}
+                          type="file"
+                          placeholder="Classic smoothies are great."
+                        />
                         <FormErrorMessage>{form.errors.image}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
-                  <Flex justify={'end'} mb={4}>
-                    <Button
-                      mt={4}
-                      mr={4}
-                      onClick={onClose}
-                    >
+                  <Flex justify={"end"} mb={4}>
+                    <Button mt={4} mr={4} onClick={onClose}>
                       Cancel
                     </Button>
                     <Button
                       mt={4}
-                      colorScheme='green'
+                      colorScheme="green"
                       isLoading={props.isSubmitting}
-                      type='submit'
+                      type="submit"
                     >
                       Add Category
                     </Button>

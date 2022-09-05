@@ -1,25 +1,37 @@
-import React from 'react'
-import { Formik, Form, Field } from 'formik'
-import * as Yup from 'yup'
-import { Button, Modal, ModalOverlay, useDisclosure, ModalContent, ModalBody, ModalCloseButton, ModalHeader, Text, FormControl, FormLabel, Input, FormErrorMessage, Flex } from '@chakra-ui/react'
+import React from "react"
+import { Formik, Form, Field } from "formik"
+import * as Yup from "yup"
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  useDisclosure,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  ModalHeader,
+  Text,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  Flex,
+} from "@chakra-ui/react"
+import axios from "axios"
+import config from "../../../config"
 
-const TableModal = () => {
+const TableModal = ({ setTables }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const CategorySchema = Yup.object().shape({
-    name: Yup.string()
-      .min(3, 'Too Short!')
-      .max(30, 'Too Long!')
-      .required('Required'),
-    description: Yup.string()
-      .min(3, 'Too Short!')
-      .max(120, 'Too Long!')
-      .required('Required'),
+    tableNumber: Yup.number().min(1, "Too Short!").required("Required"),
   })
 
   return (
     <div>
-      <Button colorScheme='green' onClick={onOpen}>Add Table</Button>
+      <Button colorScheme="green" onClick={onOpen}>
+        Add Table
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
@@ -27,41 +39,57 @@ const TableModal = () => {
           <ModalHeader>Create a new table</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text></Text>
             <Formik
-              initialValues={{ name: '', description: '', image: '' }}
+              initialValues={{ tableNumber: "" }}
               validationSchema={CategorySchema}
-              onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2))
-                  actions.setSubmitting(false)
-                }, 1000)
+              onSubmit={async (values, actions) => {
+                // setTimeout(() => {
+                //   alert(JSON.stringify(values, null, 2))
+                // actions.setSubmitting(false)
+                // }, 1000)
+                // console.log(values)
+                try {
+                  const { status, data } = await axios.post(
+                    `${config.URL}/api/v1/tables`,
+                    { number: values.tableNumber },
+                    { withCredentials: true }
+                  )
+                  if (status === 200) {
+                    console.log(data)
+                    onClose()
+                  }
+                } catch (err) {
+                  console.log(err)
+                  onClose()
+                }
               }}
             >
               {(props) => (
                 <Form>
-                  <Field name='number'>
+                  <Field name="tableNumber">
                     {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.number && form.touched.number}>
+                      <FormControl
+                        isInvalid={
+                          form.errors.tableNumber && form.touched.tableNumber
+                        }
+                      >
                         <FormLabel>Number</FormLabel>
-                        <Input {...field} placeholder='4' type="number" />
-                        <FormErrorMessage>{form.errors.number}</FormErrorMessage>
+                        <Input {...field} placeholder="4" type="tableNumber" />
+                        <FormErrorMessage>
+                          {form.errors.tableNumber}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
-                  <Flex justify={'end'} mb={4}>
-                    <Button
-                      mt={4}
-                      mr={4}
-                      onClick={onClose}
-                    >
+                  <Flex justify={"end"} mb={4}>
+                    <Button mt={4} mr={4} onClick={onClose}>
                       Cancel
                     </Button>
                     <Button
                       mt={4}
-                      colorScheme='green'
+                      colorScheme="green"
                       isLoading={props.isSubmitting}
-                      type='submit'
+                      type="submit"
                     >
                       Add Table
                     </Button>
