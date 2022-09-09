@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Formik, Form, Field } from "formik"
 import * as Yup from "yup"
 import {
@@ -17,12 +17,16 @@ import {
   Input,
   FormErrorMessage,
   Flex,
+  Image
 } from "@chakra-ui/react"
-import config from "../../../config"
-import axios from "axios"
+import { useDispatch } from 'react-redux'
+import { uploadFile } from "../../../apis/"
+import { addCategoryAction, updateCategoryAction } from "../../../store/categorySlice"
 
-const CategoryModal = ({ setNewCategory }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+const CategoryModal = ({ type, isEditing, setIsEditing, category }) => {
+  const dispatch = useDispatch()
+  const { isOpen, onOpen, onClose } = useDisclosure(type === "EDIT" ? { isOpen: isEditing, onOpen: () => setIsEditing(true), onClose: () => setIsEditing(false) } : {})
+  const [image, setImage] = useState(null)
 
   const CategorySchema = Yup.object().shape({
     name: Yup.string()
@@ -35,39 +39,45 @@ const CategoryModal = ({ setNewCategory }) => {
       .required("Required"),
   })
 
+  const onImageChange = async (event) => {
+    const tempFiles = event.target.files;
+    if (tempFiles && tempFiles[0]) {
+
+      const { url } = await uploadFile(tempFiles[0])
+      setImage(url)
+    }
+  }
+
+  useEffect(() => {
+    setImage(category?.image);
+  }, [category?.image])
+
   return (
     <Box>
-      <Button colorScheme="green" onClick={onOpen}>
-        Add Category
-      </Button>
-
+      {
+        type === "EDIT" ? '' : <Button colorScheme="green" onClick={onOpen}>
+          Add Category
+        </Button>
+      }
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create a new category</ModalHeader>
+        <ModalContent maxHeight={"90vh"} >
+          <ModalHeader>{type === "EDIT" ? "Edit" : "Create a new"} category</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Text></Text>
+          <ModalBody overflowY='scroll'>
             <Formik
-              initialValues={{ name: "", description: "", image: "" }}
+              initialValues={type === "EDIT" ? { name: category.name, description: category.description, image: category.image } : { name: "", description: "", image: "" }}
               validationSchema={CategorySchema}
               onSubmit={async (values, actions) => {
-                try {
-                  const { status, data } = await axios.post(
-                    `${config.URL}/api/v1/categories`,
-                    values,
-                    { withCredentials: true }
-                  )
-                  if (status === 200) {
-                    // actions.setSubmitting(false)
-                    setNewCategory(data)
-                    onClose()
-                  }
-                } catch (err) {
-                  console.log(err)
-                  onClose()
+                values.image = image
+                console.log("Values :", values)
+                if (type === "EDIT") {
+                  dispatch(updateCategoryAction({ categoryId: category.id, category: values }))
+                } else {
+                  dispatch(addCategoryAction(values))
                 }
-                //
+                setImage('')
+                onClose()
               }}
             >
               {(props) => (
@@ -102,7 +112,7 @@ const CategoryModal = ({ setNewCategory }) => {
                       </FormControl>
                     )}
                   </Field>
-                  <Field name="image">
+                  <Field name="image"  >
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={form.errors.image && form.touched.image}
@@ -110,16 +120,24 @@ const CategoryModal = ({ setNewCategory }) => {
                       >
                         <FormLabel>Image</FormLabel>
                         <Input
-                          {...field}
+                          // {...field}
                           type="file"
-                          placeholder="Classic smoothies are great."
+                          accept="image/png, image/jpg, image/jpeg"
+                          onChange={onImageChange}
                         />
                         <FormErrorMessage>{form.errors.image}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
+                  {
+                    image && <Box my={4}>
+                      <FormLabel>Image Preview</FormLabel>
+                      <Image src={image} alt={''} />
+                    </Box>
+                  }
+
                   <Flex justify={"end"} mb={4}>
-                    <Button mt={4} mr={4} onClick={onClose}>
+                    <Button mt={4} mr={4} onClick={() => { onClose(); setImage(null); }}>
                       Cancel
                     </Button>
                     <Button
@@ -128,7 +146,7 @@ const CategoryModal = ({ setNewCategory }) => {
                       isLoading={props.isSubmitting}
                       type="submit"
                     >
-                      Add Category
+                      {type === "EDIT" ? "Edit" : "Add"} Category
                     </Button>
                   </Flex>
                 </Form>
@@ -137,7 +155,7 @@ const CategoryModal = ({ setNewCategory }) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </Box>
+    </Box >
   )
 }
 

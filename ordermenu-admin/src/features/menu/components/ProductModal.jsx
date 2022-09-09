@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Formik, Form, Field } from "formik"
 import * as Yup from "yup"
 import {
@@ -17,16 +17,26 @@ import {
   Input,
   FormErrorMessage,
   Flex,
+  Image,
+  Select,
 } from "@chakra-ui/react"
+import { useDispatch, useSelector } from 'react-redux'
+import { uploadFile } from "../../../apis/"
+import { addProductAction, updateProductAction } from "../../../store/productSlice"
+import OtherOptions from "./OtherOptions"
+import { selectCategory } from "../../../store/categorySlice"
 
-const ProductModal = () => {
+const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
+  const dispatch = useDispatch()
+  const { categories } = useSelector(selectCategory)
   const [sizes, setSizes] = useState([])
   const [extra, setExtra] = useState([])
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [image, setImage] = useState(null)
+  const { isOpen, onOpen, onClose } = useDisclosure(type === "EDIT" ? { isOpen: isEditing, onOpen: () => setIsEditing(true), onClose: () => setIsEditing(false) } : {})
 
-  console.log(sizes, setSizes, extra, setExtra)
+  console.log(sizes, extra)
 
-  const CategorySchema = Yup.object().shape({
+  const ProductSchema = Yup.object().shape({
     name: Yup.string()
       .min(3, "Too Short!")
       .max(50, "Too Long!")
@@ -35,38 +45,70 @@ const ProductModal = () => {
       .min(3, "Too Short!")
       .max(120, "Too Long!")
       .required("Required"),
+    category: Yup.string()
+      .required("Required"),
     price: Yup.number()
       .min(1, "Too low!")
-      .max(5000, "Too high!")
       .required("Required"),
   })
 
+
+  const onImageChange = async (event) => {
+    const tempFiles = event.target.files;
+    if (tempFiles && tempFiles[0]) {
+      const { url } = await uploadFile(tempFiles[0])
+      setImage(url)
+    }
+  }
+
+  useEffect(() => {
+    if (type === "EDIT") {
+      if (product?.sizes)
+        setSizes(product?.sizes)
+
+      if (product?.extra)
+        setExtra(product?.extra)
+    } else {
+      setSizes([])
+      setExtra([])
+    }
+  }, [type, setSizes, setExtra, product?.sizes, product?.extra])
+
   return (
     <Box>
-      <Button colorScheme="green" onClick={onOpen}>
-        Add Product
-      </Button>
+      {
+        type === "EDIT" ? '' : <Button colorScheme="green" onClick={onOpen}>
+          Add Product
+        </Button>
+      }
+
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add a new product</ModalHeader>
+        <ModalContent maxHeight={"90vh"}>
+          <ModalHeader>{type === "EDIT" ? "Edit" : "Add a new"} product</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody overflowY='scroll'>
             <Text></Text>
             <Formik
-              initialValues={{
+              initialValues={type === "EDIT" ? { name: product?.name, description: product?.description, image: product?.image, price: product?.price, category: product?.category } : {
                 name: "",
                 description: "",
                 image: "",
                 price: "",
+                category: ""
               }}
-              validationSchema={CategorySchema}
+              validationSchema={ProductSchema}
               onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2))
-                  actions.setSubmitting(false)
-                }, 1000)
+                console.log("Values to be submitted =====> ", values, sizes, extra)
+                values.image = image
+                if (type === "EDIT") {
+                  dispatch(updateProductAction({ productId: product._id, product: { ...values, sizes, extra } }))
+                } else {
+                  dispatch(addProductAction({ ...values, sizes, extra }))
+                }
+                setImage('')
+                onClose()
               }}
             >
               {(props) => (
@@ -90,14 +132,21 @@ const ProductModal = () => {
                       >
                         <FormLabel>Image</FormLabel>
                         <Input
-                          {...field}
+                          // {...field}
                           type="file"
-                          placeholder="Classic smoothies are great."
+                          accept="image/png, image/jpg, image/jpeg"
+                          onChange={onImageChange}
                         />
                         <FormErrorMessage>{form.errors.image}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
+                  {
+                    image && <Box my={4}>
+                      <FormLabel>Image Preview</FormLabel>
+                      <Image src={image} alt={''} />
+                    </Box>
+                  }
                   <Field name="price">
                     {({ field, form }) => (
                       <FormControl
@@ -107,6 +156,23 @@ const ProductModal = () => {
                         <FormLabel>Price</FormLabel>
                         <Input {...field} placeholder="450" type="number" />
                         <FormErrorMessage>{form.errors.price}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="category">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={form.errors.category && form.touched.category}
+                        mt={4}
+                      >
+                        <FormLabel>Category</FormLabel>
+                        <Select {...field} placeholder='Select category'>
+                          {
+                            categories?.map(category => <option id={category?._id}>{category?.name}</option>)
+                          }
+
+                        </Select>
+                        <FormErrorMessage>{form.errors.category}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -129,150 +195,19 @@ const ProductModal = () => {
                       </FormControl>
                     )}
                   </Field>
-                  <Formik
-                    initialValues={{ name: "", price: "" }}
-                    validationSchema={CategorySchema}
-                    onSubmit={(values, actions) => {
-                      // setTimeout(() => {
-                      //   alert(JSON.stringify(values, null, 2))
-                      //   actions.setSubmitting(false)
-                      // }, 1000)
-                      console.log(values)
-                    }}
-                  >
-                    {(props) => (
-                      <Form>
-                        <Flex
-                          justify={"space-between"}
-                          align="self-end"
-                          gap={4}
-                        >
-                          <Field name="name">
-                            {({ field, form }) => (
-                              <FormControl
-                                isInvalid={
-                                  form.errors.name && form.touched.name
-                                }
-                                mt={4}
-                              >
-                                <FormLabel>Size</FormLabel>
-                                <Input {...field} placeholder="Regular" />
-                                <FormErrorMessage>
-                                  {form.errors.name}
-                                </FormErrorMessage>
-                              </FormControl>
-                            )}
-                          </Field>
-                          <Field name="price">
-                            {({ field, form }) => (
-                              <FormControl
-                                isInvalid={
-                                  form.errors.price && form.touched.price
-                                }
-                                mt={4}
-                              >
-                                <Input
-                                  {...field}
-                                  placeholder="0"
-                                  type="number"
-                                />
-                                <FormErrorMessage>
-                                  {form.errors.price}
-                                </FormErrorMessage>
-                              </FormControl>
-                            )}
-                          </Field>
-
-                          <Button
-                            mt={4}
-                            colorScheme="green"
-                            variant={"outline"}
-                            isLoading={props.isSubmitting}
-                            type="submit"
-                          >
-                            Add
-                          </Button>
-                        </Flex>
-                      </Form>
-                    )}
-                  </Formik>
-                  <Formik
-                    initialValues={{ name: "", description: "", image: "" }}
-                    validationSchema={CategorySchema}
-                    onSubmit={(values, actions) => {
-                      setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2))
-                        actions.setSubmitting(false)
-                      }, 1000)
-                    }}
-                  >
-                    {(props) => (
-                      <Form>
-                        <Flex
-                          justify={"space-between"}
-                          align="self-end"
-                          gap={4}
-                        >
-                          <Field name="name">
-                            {({ field, form }) => (
-                              <FormControl
-                                isInvalid={
-                                  form.errors.name && form.touched.name
-                                }
-                                mt={4}
-                              >
-                                <FormLabel>Extra</FormLabel>
-                                <Input {...field} placeholder="Regular" />
-                                <FormErrorMessage>
-                                  {form.errors.name}
-                                </FormErrorMessage>
-                              </FormControl>
-                            )}
-                          </Field>
-                          <Field name="price">
-                            {({ field, form }) => (
-                              <FormControl
-                                isInvalid={
-                                  form.errors.price && form.touched.price
-                                }
-                                mt={4}
-                              >
-                                <Input
-                                  {...field}
-                                  placeholder="0"
-                                  type="number"
-                                />
-                                <FormErrorMessage>
-                                  {form.errors.price}
-                                </FormErrorMessage>
-                              </FormControl>
-                            )}
-                          </Field>
-
-                          <Button
-                            mt={4}
-                            colorScheme="green"
-                            variant={"outline"}
-                            isLoading={props.isSubmitting}
-                            type="submit"
-                          >
-                            Add
-                          </Button>
-                        </Flex>
-                      </Form>
-                    )}
-                  </Formik>
-                  <Flex justify={"end"} mb={4}>
-                    <Button mt={4} mr={4} onClick={onClose}>
+                  <OtherOptions fieldName="Size" options={sizes} setOptions={setSizes} />
+                  <OtherOptions fieldName="Extra" options={extra} setOptions={setExtra} />
+                  <Flex justify={"end"} mb={4} mt={6}>
+                    <Button mr={4} onClick={onClose}>
                       Cancel
                     </Button>
                     <Button
-                      mt={4}
                       colorScheme="green"
                       isLoading={props.isSubmitting}
-                      type="submit"
+                      onClick={() => props.submitForm()}
                     >
-                      Add Category
+                      {type === "EDIT" ? "Edit" : "Add "}
+                      Product
                     </Button>
                   </Flex>
                 </Form>

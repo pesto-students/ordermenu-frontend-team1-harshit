@@ -10,21 +10,21 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalHeader,
-  Text,
   FormControl,
   FormLabel,
   Input,
   FormErrorMessage,
   Flex,
 } from "@chakra-ui/react"
-import axios from "axios"
-import config from "../../../config"
+import { useDispatch } from "react-redux"
+import { addTableAction } from "../../../store/tableSlice"
 
-const TableModal = ({ setTables }) => {
+const TableModal = () => {
+  const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const CategorySchema = Yup.object().shape({
-    tableNumber: Yup.number().min(1, "Too Short!").required("Required"),
+  const TableSchema = Yup.object().shape({
+    number: Yup.number().min(1, "Too Short!").required("Required"),
   })
 
   return (
@@ -40,43 +40,27 @@ const TableModal = ({ setTables }) => {
           <ModalCloseButton />
           <ModalBody>
             <Formik
-              initialValues={{ tableNumber: "" }}
-              validationSchema={CategorySchema}
+              initialValues={{ number: "" }}
+              validationSchema={TableSchema}
               onSubmit={async (values, actions) => {
-                // setTimeout(() => {
-                //   alert(JSON.stringify(values, null, 2))
-                // actions.setSubmitting(false)
-                // }, 1000)
-                // console.log(values)
-                try {
-                  const { status, data } = await axios.post(
-                    `${config.URL}/api/v1/tables`,
-                    { number: values.tableNumber },
-                    { withCredentials: true }
-                  )
-                  if (status === 200) {
-                    console.log(data)
-                    onClose()
-                  }
-                } catch (err) {
-                  console.log(err)
-                  onClose()
-                }
+                console.log("Table => ", values)
+                dispatch(addTableAction(values))
+                onClose()
               }}
             >
               {(props) => (
                 <Form>
-                  <Field name="tableNumber">
+                  <Field name="number">
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={
-                          form.errors.tableNumber && form.touched.tableNumber
+                          form.errors.number && form.touched.number
                         }
                       >
                         <FormLabel>Number</FormLabel>
-                        <Input {...field} placeholder="4" type="tableNumber" />
+                        <Input {...field} placeholder="4" type="number" />
                         <FormErrorMessage>
-                          {form.errors.tableNumber}
+                          {form.errors.number}
                         </FormErrorMessage>
                       </FormControl>
                     )}

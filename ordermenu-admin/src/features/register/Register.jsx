@@ -398,7 +398,7 @@ export default function Register() {
 
       try {
         const { data, status } = await axios.post(
-          `${config.URL}/api/v1/signin`,
+          `${config.URL}/api/v1/signin/admin`,
           {
             phone: value.phone,
           }

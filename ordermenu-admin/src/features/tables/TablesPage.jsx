@@ -10,28 +10,21 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { FiChevronRight } from "react-icons/fi"
+import { useSelector, useDispatch } from "react-redux"
+
 import TableModal from "./components/TableModal"
 import TableCard from "./components/TableCard"
-import config from "../../config"
-import axios from "axios"
+import { fetchAllTables, selectTable } from "../../store/tableSlice"
 
 const TablesPage = () => {
-  const [tables, setTables] = useState([])
+  const dispatch = useDispatch()
+  const { isLoading, tables } = useSelector(selectTable)
+
 
   useEffect(() => {
-    getTableData()
-  }, [])
+    dispatch(fetchAllTables())
+  }, [dispatch])
 
-  async function getTableData() {
-    try {
-      const { data, status } = await axios.get(`${config.URL}/api/v1/tables`)
-      if (status === 200) {
-        setTables(data)
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
   return (
     <>
       <Flex justifyContent={"space-between"} align="center" mb={4}>
@@ -43,7 +36,7 @@ const TablesPage = () => {
           </BreadcrumbItem>
         </Breadcrumb>
 
-        <TableModal setTables={setTables} />
+        <TableModal />
       </Flex>
       {tables.length === 0 ? (
         <Center>
@@ -61,13 +54,10 @@ const TablesPage = () => {
           }}
           gap={4}
         >
-          {tables.map((table) => {
-            return (
-              <GridItem>
-                <TableCard />
-              </GridItem>
-            )
-          })}
+          {tables.map((table) => <GridItem key={table?._id}>
+            <TableCard table={table} />
+          </GridItem>
+          )}
         </Grid>
       )}
     </>

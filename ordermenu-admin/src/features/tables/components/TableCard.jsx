@@ -1,14 +1,17 @@
 import React from 'react'
 import { AspectRatio, Box, Heading, Image, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
+import { useDispatch } from "react-redux"
 
 import { FiMoreVertical, FiDownload, FiTrash2 } from 'react-icons/fi';
+import { deleteTableAction } from '../../../store/tableSlice';
 
-const TableCard = () => {
+const TableCard = ({ table }) => {
+  const dispatch = useDispatch()
   return (
     <Box bg="white" shadow='sm' borderRadius="0.5rem" p={4}>
       <Box position={'relative'}>
         <AspectRatio ratio={1}>
-          <Image src={'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Qr-nl-wikipedia-or.svg/396px-Qr-nl-wikipedia-or.svg.png?20180404230944'} alt={''} borderRadius="0.5rem" objectFit={'cover'} objectPosition='center center' />
+          <Image src={table?.qrCode} alt={table?.number} borderRadius="0.5rem" objectFit={'cover'} objectPosition='center center' />
         </AspectRatio>
 
         <Box position="absolute" top={'0.5rem'} right={'0.5rem'}>
@@ -24,7 +27,7 @@ const TableCard = () => {
               <MenuItem icon={<FiDownload />}>
                 Download
               </MenuItem>
-              <MenuItem icon={<FiTrash2 />} color='red.500'>
+              <MenuItem icon={<FiTrash2 />} color='red.500' onClick={() => dispatch(deleteTableAction(table?._id))}>
                 Delete
               </MenuItem>
             </MenuList>
@@ -33,7 +36,7 @@ const TableCard = () => {
       </Box>
 
       <Heading size='md' mt={4}>
-        Table Number - {4}
+        Table Number - {table?.number}
       </Heading>
     </Box >
   )

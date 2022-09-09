@@ -1,7 +1,6 @@
 import React from "react"
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
@@ -15,7 +14,6 @@ import {
   useDisclosure,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
 } from "@chakra-ui/react"
@@ -26,12 +24,12 @@ import {
   RiBookletLine,
   RiRestaurantLine,
   RiRestaurant2Line,
-  RiSettings4Line,
   RiPassportLine,
   RiTable2,
 } from "react-icons/ri"
 import { Link, Outlet } from "react-router-dom"
 import { useLocation } from "react-router-dom"
+import cookies from 'js-cookie'
 
 const LinkItems = [
   { name: "Dashboard", icon: RiHome4Line, path: "/dashboard" },
@@ -54,8 +52,7 @@ const LinkItems = [
     name: "Reaturant Details",
     icon: RiRestaurant2Line,
     path: "/restaurant-details",
-  },
-  { name: "Settings", icon: RiSettings4Line, path: "/settings" },
+  }
 ]
 
 const SidebarWithHeader = () => {
@@ -247,12 +244,6 @@ const SidebarWithHeader = () => {
                 _focus={{ boxShadow: "none" }}
               >
                 <HStack>
-                  <Avatar
-                    size={"sm"}
-                    src={
-                      "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                    }
-                  />
                   <VStack
                     display={{ base: "none", md: "flex" }}
                     alignItems="flex-start"
@@ -273,11 +264,10 @@ const SidebarWithHeader = () => {
                 bg={useColorModeValue("white", "gray.900")}
                 borderColor={useColorModeValue("gray.200", "gray.700")}
               >
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>Settings</MenuItem>
-                <MenuItem>Billing</MenuItem>
-                <MenuDivider />
-                <MenuItem>Sign out</MenuItem>
+                <MenuItem onClick={() => {
+                  cookies.remove("accessToken");
+                  cookies.remove("refreshToeken");
+                }}>Sign out</MenuItem>
               </MenuList>
             </Menu>
           </Flex>

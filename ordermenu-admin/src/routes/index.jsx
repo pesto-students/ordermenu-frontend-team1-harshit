@@ -8,7 +8,6 @@ import {
   ProductsPage,
   OrdersPage,
   RestaurantDetailsPage,
-  SettingsPage,
   TablesPage,
 } from "../features/index"
 import Login from "../features/login/Login"
@@ -18,7 +17,6 @@ import config from "../config"
 import axios from "axios"
 import { useAuth } from "../context/AuthContext"
 import { useEffect } from "react"
-import { Navigate } from "react-router-dom"
 
 const BaseRoutes = () => {
   const { setAuthState } = useAuth()
@@ -100,14 +98,6 @@ const BaseRoutes = () => {
           element={
             <ProtectedRoute>
               <RestaurantDetailsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <SettingsPage />
             </ProtectedRoute>
           }
         />

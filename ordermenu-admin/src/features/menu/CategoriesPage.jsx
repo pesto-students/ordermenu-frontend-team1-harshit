@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import {
   Flex,
   Breadcrumb,
@@ -6,43 +6,22 @@ import {
   BreadcrumbLink,
   Grid,
   GridItem,
+  Center, Text
 } from "@chakra-ui/react"
-import { Center, Text } from "@chakra-ui/react"
 import { FiChevronRight } from "react-icons/fi"
+import { useSelector, useDispatch } from "react-redux"
+
 import CategoryModal from "./components/CategoryModal"
 import CategoryCard from "./components/CategoryCard"
-import { useEffect } from "react"
-import axios from "axios"
-import config from "../../config"
+import { fetchAllCategories, selectCategory } from "../../store/categorySlice"
 
 const CategoriesPage = () => {
-  const [categories, setCategories] = useState([])
-  const [newCategory, setNewCategory] = useState({})
+  const dispatch = useDispatch()
+  const { isLoading, categories } = useSelector(selectCategory)
 
   useEffect(() => {
-    getCategories()
-  }, [])
-
-  useEffect(() => {
-    if (Object.keys(newCategory).length === 0) {
-      return
-    }
-    setCategories((prev) => [...prev, newCategory])
-    setNewCategory({})
-  }, [newCategory])
-
-  async function getCategories() {
-    try {
-      const { data, status } = await axios.get(
-        `${config.URL}/api/v1/categories`,
-        {},
-        { withCredentials: true }
-      )
-      if (status === 200) setCategories(data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+    dispatch(fetchAllCategories())
+  }, [dispatch])
 
   return (
     <>
@@ -61,7 +40,7 @@ const CategoriesPage = () => {
           </BreadcrumbItem>
         </Breadcrumb>
 
-        <CategoryModal setNewCategory={setNewCategory} />
+        <CategoryModal />
       </Flex>
 
       {categories.length === 0 ? (

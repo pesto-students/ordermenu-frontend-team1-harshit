@@ -43,7 +43,7 @@ export default function Login() {
       return
     }
     try {
-      const { data, status } = await axios.post(`${config.URL}/api/v1/signin`, {
+      const { data, status } = await axios.post(`${config.URL}/api/v1/signin/admin`, {
         phone: phone,
       })
       if (status === 200) {
@@ -120,6 +120,16 @@ export default function Login() {
           onClick={() => handleSendOtp(phone)}
         >
           Send OTP
+        </Button>
+        <Button
+          width="100%"
+          colorScheme={'green'}
+          variant='ghost'
+          _hover={{ bg: "none" }}
+          mt={2}
+          onClick={() => navigate('/register')}
+        >
+          Create an account?
         </Button>
       </>
     )

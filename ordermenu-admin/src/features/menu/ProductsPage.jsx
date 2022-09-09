@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import {
   Flex,
   Breadcrumb,
@@ -9,32 +9,20 @@ import {
   Center,
   Text,
 } from "@chakra-ui/react"
+import { useSelector, useDispatch } from 'react-redux'
 import { FiChevronRight } from "react-icons/fi"
 import ProductModal from "./components/ProductModal"
 import ProductCard from "./components/ProductCard"
-import config from "../../config"
-import axios from "axios"
-import { useEffect } from "react"
+import { fetchAllProducts, selectProduct } from "../../store/productSlice"
 
 const ProductsPage = () => {
-  const [products, setProducts] = useState([])
+  const dispatch = useDispatch()
+  const { isLoading, products } = useSelector(selectProduct)
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    dispatch(fetchAllProducts())
+  }, [dispatch])
 
-  async function getProducts() {
-    try {
-      const { data, status } = await axios.get(
-        `${config.URL}/api/v1/products`,
-        {},
-        { withCredentials: true }
-      )
-      if (status === 200) setProducts(data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
   return (
     <>
       <Flex justifyContent={"space-between"} align="center" mb={4}>
@@ -69,18 +57,12 @@ const ProductsPage = () => {
           }}
           gap={4}
         >
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
+
+          {
+            products?.map(product => <GridItem key={product._id}>
+              <ProductCard product={product} />
+            </GridItem>)
+          }
         </Grid>
       )}
     </>
