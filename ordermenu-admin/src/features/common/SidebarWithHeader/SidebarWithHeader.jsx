@@ -16,6 +16,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Image,
 } from "@chakra-ui/react"
 import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi"
 import {
@@ -30,6 +31,8 @@ import {
 import { Link, Outlet } from "react-router-dom"
 import { useLocation } from "react-router-dom"
 import cookies from 'js-cookie'
+import { useDispatch, useSelector } from "react-redux"
+import { selectUser, setIsAuthenticated } from "../../../store/authSlice"
 
 const LinkItems = [
   { name: "Dashboard", icon: RiHome4Line, path: "/dashboard" },
@@ -57,6 +60,8 @@ const LinkItems = [
 
 const SidebarWithHeader = () => {
   const location = useLocation()
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const SidebarContent = ({ onClose, ...rest }) => {
@@ -72,8 +77,8 @@ const SidebarWithHeader = () => {
         {...rest}
       >
         <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-            OrderMenu
+          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" textAlign="center">
+            <Image src="/assets/logo.svg" alt="logo" height="2rem" />
           </Text>
           <CloseButton
             display={{ base: "flex", md: "none" }}
@@ -222,11 +227,11 @@ const SidebarWithHeader = () => {
 
         <Text
           display={{ base: "flex", md: "none" }}
-          fontSize="2xl"
+          fontSize="xl"
           fontFamily="monospace"
           fontWeight="bold"
         >
-          OrderMenu
+          <Image src="/assets/logo.svg" height="2.5rem" alt="logo" />
         </Text>
 
         <HStack spacing={{ base: "0", md: "6" }}>
@@ -250,10 +255,7 @@ const SidebarWithHeader = () => {
                     spacing="1px"
                     ml="2"
                   >
-                    <Text fontSize="sm">Justina Clark</Text>
-                    <Text fontSize="xs" color="gray.600">
-                      Admin
-                    </Text>
+                    <Text fontSize="sm">{user?.firstName}</Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>
                     <FiChevronDown />
@@ -264,10 +266,14 @@ const SidebarWithHeader = () => {
                 bg={useColorModeValue("white", "gray.900")}
                 borderColor={useColorModeValue("gray.200", "gray.700")}
               >
-                <MenuItem onClick={() => {
-                  cookies.remove("accessToken");
-                  cookies.remove("refreshToeken");
-                }}>Sign out</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    cookies.remove("accessToken");
+                    cookies.remove("refreshToeken");
+                    dispatch(setIsAuthenticated(false));
+                  }}
+                  color='red.400'
+                >Sign out</MenuItem>
               </MenuList>
             </Menu>
           </Flex>

@@ -12,7 +12,6 @@ export const fetchUserDetails = createAsyncThunk(
   async () => await getUserDetails()
 )
 
-
 // Actual Slice
 export const authSlice = createSlice({
   name: "auth",
@@ -37,6 +36,8 @@ export const authSlice = createSlice({
     },
   }
 });
+
+export const { setIsAuthenticated } = authSlice.actions
 
 export const selectIsAuthenticated = (state) => state?.auth?.isAuthenticated;
 export const selectUser = (state) => state?.auth?.user;

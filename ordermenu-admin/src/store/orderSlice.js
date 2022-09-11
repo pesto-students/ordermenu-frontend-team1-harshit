@@ -1,10 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getAllOrders, getOrderStats } from '../apis'
+import { getAllOrders, getOrderStats, updateOrderStatus } from '../apis'
 
 // Initial state
 const initialState = {
   isLoading: true,
-  orders: [],
+  orders: {
+    results: [],
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+    totalResults: 0
+  },
   error: false,
   stats: {
     isLoading: true,
@@ -15,12 +21,17 @@ const initialState = {
 
 export const fetchAllOrders = createAsyncThunk(
   'order/fetchAllOrders',
-  async (partnerId) => await getAllOrders(partnerId)
+  async ({ partnerId, sortBy, limit, page, status }) => await getAllOrders(partnerId, sortBy, limit, page, status)
 )
 
 export const fetchOrderStats = createAsyncThunk(
   'order/fetchOrderStats',
   async (partnerId) => await getOrderStats(partnerId)
+)
+
+export const updateOrderStatusAction = createAsyncThunk(
+  'order/updateOrderStatusAction',
+  async ({ orderId, status }) => await updateOrderStatus(orderId, status)
 )
 
 // Actual Slice
@@ -38,7 +49,6 @@ export const orderSlice = createSlice({
     },
     [fetchAllOrders.rejected]: (state) => {
       state.isLoading = false
-      state.orders = []
       state.error = true
     },
     [fetchOrderStats.pending]: (state) => {
@@ -52,6 +62,10 @@ export const orderSlice = createSlice({
       state.stats.isLoading = false
       state.stats.stat = {}
       state.stats.error = true
+    },
+    [updateOrderStatusAction.fulfilled]: (state, { payload }) => {
+      const index = state.orders.results.findIndex((order) => order?._id === payload._id)
+      state.orders.results[index] = payload
     },
   }
 });

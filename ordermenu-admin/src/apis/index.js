@@ -5,8 +5,8 @@ export const signin = async (phone) => {
   return response
 }
 
-export const signup = async (user) => {
-  const response = await instance.post('/signin', user)
+export const signup = async (partner) => {
+  const response = await instance.post('/partners', partner)
   return response
 }
 
@@ -89,8 +89,13 @@ export const deleteTable = async (productId) => {
   return response
 }
 
-export const getAllOrders = async (partnerId) => {
-  const response = await instance.get(`/orders/partners/${partnerId}`)
+export const getAllOrders = async (partnerId, sortBy = '-createdAt', limit = '10', page = '1', status) => {
+  const response = await instance.get(`/orders/partners/${partnerId}?${status && `status=${status}`}&sortBy=${sortBy}&limit=${limit}&page=${page}`)
+  return response
+}
+
+export const updateOrderStatus = async (orderId, status) => {
+  const response = await instance.patch(`/orders/${orderId}/${status}`)
   return response
 }
 

@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux"
 import { fetchPartner, selectPartner } from '../../store/partnerSlice'
 import { fetchOrderStats, selectStats } from '../../store/orderSlice'
 import Stats from "./components/Stats"
+import { fetchUserDetails } from "../../store/authSlice"
+import Loader from "../common/Loader/Loader"
 
 const DashboardPage = () => {
   const dispatch = useDispatch()
@@ -13,6 +15,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     dispatch(fetchPartner())
+    dispatch(fetchUserDetails())
   }, [dispatch])
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const DashboardPage = () => {
   }, [dispatch, partner?._id])
 
 
-  return <div>{isLoading ? <Spinner color='green.400' /> : <Stats orderStats={stat} partner={partner} />}</div>
+  return <div>{isLoading ? <Loader /> : <Stats orderStats={stat} partner={partner} />}</div>
 }
 
 

@@ -1,7 +1,9 @@
-import React from "react"
-import { Routes, Route } from "react-router-dom"
-import SidebarWithHeader from "../features/common/SidebarWithHeader/SidebarWithHeader"
+import React, { useEffect } from "react"
+import { Routes, Route, Navigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import Cookies from 'js-cookie'
 
+import SidebarWithHeader from "../features/common/SidebarWithHeader/SidebarWithHeader"
 import {
   DashboardPage,
   CategoriesPage,
@@ -10,98 +12,88 @@ import {
   RestaurantDetailsPage,
   TablesPage,
 } from "../features/index"
-import Login from "../features/login/Login"
-import Register from "../features/register/Register"
+import Login from "../features/auth/Login"
+import Register from "../features/auth/Register"
 import ProtectedRoute from "../utils/ProtectedRoute"
-import config from "../config"
-import axios from "axios"
-import { useAuth } from "../context/AuthContext"
-import { useEffect } from "react"
+import VerifyOtpPage from "../features/auth/VerifyOtpPage"
+import { selectIsAuthenticated, setIsAuthenticated } from "../store/authSlice"
 
 const BaseRoutes = () => {
-  const { setAuthState } = useAuth()
+  const dispatch = useDispatch()
+  const isAuthenticated = useSelector(selectIsAuthenticated)
 
   useEffect(() => {
-    isUserLoggedIn()
-  }, [])
-
-  async function isUserLoggedIn() {
-    try {
-      const { data, status } = await axios.get(
-        `${config.URL}/api/v1/users/${localStorage.getItem("id")}`,
-        {},
-        { withCredentials: true }
-      )
-      if (status === 200) {
-        setAuthState({ type: "LOGIN", payload: data._id })
-        setAuthState({ type: "USERDATA", payload: data })
-      }
-    } catch (err) {
-      console.log(err)
+    if (Cookies.get('accessToken')) {
+      dispatch(setIsAuthenticated(true))
     }
-  }
+  }, [dispatch])
+
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route element={<SidebarWithHeader />}>
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/menu/categories"
-          element={
-            <ProtectedRoute>
-              <CategoriesPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/menu/food-drinks"
-          element={
-            <ProtectedRoute>
-              <ProductsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/tables"
-          element={
-            <ProtectedRoute>
-              <TablesPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <ProtectedRoute>
-              <OrdersPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/restaurant-details"
-          element={
-            <ProtectedRoute>
-              <RestaurantDetailsPage />
-            </ProtectedRoute>
-          }
-        />
-      </Route>
+      {
+        !isAuthenticated ? <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-otp" element={<VerifyOtpPage />} />
+          <Route
+            path="*"
+            element={<Navigate to="/login" replace />}
+          />
+        </> : <Route element={<SidebarWithHeader />}>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/menu/categories"
+            element={
+              <ProtectedRoute>
+                <CategoriesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/menu/food-drinks"
+            element={
+              <ProtectedRoute>
+                <ProductsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tables"
+            element={
+              <ProtectedRoute>
+                <TablesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <OrdersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/restaurant-details"
+            element={
+              <ProtectedRoute>
+                <RestaurantDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={<Navigate to="/dashboard" replace />}
+          />
+        </Route>
+      }
     </Routes>
   )
 }

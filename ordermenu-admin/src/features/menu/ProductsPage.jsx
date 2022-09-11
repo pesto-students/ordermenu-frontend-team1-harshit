@@ -14,6 +14,7 @@ import { FiChevronRight } from "react-icons/fi"
 import ProductModal from "./components/ProductModal"
 import ProductCard from "./components/ProductCard"
 import { fetchAllProducts, selectProduct } from "../../store/productSlice"
+import Loader from "../common/Loader/Loader"
 
 const ProductsPage = () => {
   const dispatch = useDispatch()
@@ -41,30 +42,34 @@ const ProductsPage = () => {
         </Breadcrumb>
         <ProductModal />
       </Flex>
-      {products.length === 0 ? (
-        <Center>
-          <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
-            Your shop does not have any products
-          </Text>
-        </Center>
-      ) : (
-        <Grid
-          gridTemplateColumns={{
-            base: "1fr",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(2, 1fr)",
-            lg: "repeat(4, 1fr)",
-          }}
-          gap={4}
-        >
+      {
+        isLoading ? <Loader /> : <>
+          {products.length === 0 ? (
+            <Center>
+              <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
+                Your shop does not have any products
+              </Text>
+            </Center>
+          ) : (
+            <Grid
+              gridTemplateColumns={{
+                base: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(4, 1fr)",
+              }}
+              gap={4}
+            >
 
-          {
-            products?.map(product => <GridItem key={product._id}>
-              <ProductCard product={product} />
-            </GridItem>)
-          }
-        </Grid>
-      )}
+              {
+                products?.map(product => <GridItem key={product._id}>
+                  <ProductCard product={product} />
+                </GridItem>)
+              }
+            </Grid>
+          )}
+        </>
+      }
     </>
   )
 }

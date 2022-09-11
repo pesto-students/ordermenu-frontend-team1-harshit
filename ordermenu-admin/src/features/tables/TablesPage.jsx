@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux"
 import TableModal from "./components/TableModal"
 import TableCard from "./components/TableCard"
 import { fetchAllTables, selectTable } from "../../store/tableSlice"
+import Loader from "../common/Loader/Loader"
 
 const TablesPage = () => {
   const dispatch = useDispatch()
@@ -38,28 +39,32 @@ const TablesPage = () => {
 
         <TableModal />
       </Flex>
-      {tables.length === 0 ? (
-        <Center>
-          <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
-            Your shop does not have any products
-          </Text>
-        </Center>
-      ) : (
-        <Grid
-          gridTemplateColumns={{
-            base: "1fr",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(2, 1fr)",
-            lg: "repeat(4, 1fr)",
-          }}
-          gap={4}
-        >
-          {tables.map((table) => <GridItem key={table?._id}>
-            <TableCard table={table} />
-          </GridItem>
+      {
+        isLoading ? <Loader /> : <>
+          {tables.length === 0 ? (
+            <Center>
+              <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
+                Your shop does not have any products
+              </Text>
+            </Center>
+          ) : (
+            <Grid
+              gridTemplateColumns={{
+                base: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(4, 1fr)",
+              }}
+              gap={4}
+            >
+              {tables.map((table) => <GridItem key={table?._id}>
+                <TableCard table={table} />
+              </GridItem>
+              )}
+            </Grid>
           )}
-        </Grid>
-      )}
+        </>
+      }
     </>
   )
 }
