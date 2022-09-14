@@ -17,39 +17,47 @@ import {
     Text,
     useColorModeValue,
     Divider,
+    Badge,
+    useDisclosure,
 } from '@chakra-ui/react'
 import { FiShoppingCart } from 'react-icons/fi'
 import { useSelector } from "react-redux";
 
-import { selectProducts } from 'src/store/cartSlice'
-import { selectPartner } from 'src/store/partnerSlice'
+import { selectProducts, selectTableId } from '../store/cartSlice'
+import { selectPartner } from '../store/partnerSlice'
 import { CartProductCard } from '.';
+import { useRouter } from 'next/router';
+import { selectIsAuthenticated } from '../store/authSlice';
 
 const CheckoutModal = () => {
+    const router = useRouter()
+    const tableId = useSelector(selectTableId)
     const partner = useSelector(selectPartner)
     const products = useSelector(selectProducts)
+    const isAuthenticated = useSelector(selectIsAuthenticated)
+    const { isOpen, onClose, onOpen } = useDisclosure()
     const calculateTotal = (products) => {
         let total = 0;
-
         products.map((product) => { total += (product?.price + (product?.size?.price || 0) + (product?.extra?.price || 0)) * product?.quantity; })
-
         return total
     }
 
     return (
-        <Popover placement='bottom-end'>
+        <Popover placement='bottom-end' isOpen={isOpen}>
             <PopoverTrigger>
                 <Button
-                    fontSize={'md'}
-                    fontWeight={600}
-                    variant={'ghost'}
-                    colorScheme={'gray'}
+                    size='lg'
+                    variant='link'
+                    colorScheme='gray'
+                    position="relative"
+                    onClick={onOpen}
                 >
                     <FiShoppingCart />
+                    {products?.length > 0 && <Badge colorScheme='red' variant='solid' minW={5} minH={5} position="absolute" top={-0.5} right={0} borderRadius="100%" display='flex' justifyContent="center" alignItems="center">{products?.length}</Badge>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent p={2} width={useBreakpointValue({ base: '90vw', md: '28rem' })}>
-                <PopoverCloseButton />
+                <PopoverCloseButton onClick={onClose} />
                 <PopoverBody>
                     <Flex gap={4} align="center">
                         <Image src={partner?.logo} width={useBreakpointValue({ base: '4rem', md: '5rem' })} height={useBreakpointValue({ base: '4rem', md: '5rem' })} alt={partner?.name} borderRadius={'50%'} />
@@ -78,7 +86,14 @@ const CheckoutModal = () => {
                             </Flex></> : <Flex><Text>Your cart is empty.</Text></Flex>
                     }
 
-                    <Button width='100%' mt={4} colorScheme='brand'>Checkout</Button>
+                    <Button width='100%' mt={4} colorScheme='brand' onClick={() => {
+                        if (isAuthenticated) {
+                            router.push('/checkout')
+                        } else {
+                            router.push('/auth/signin')
+                        }
+                        onClose()
+                    }} disabled={products?.length === 0 || !tableId}>Checkout</Button>
                 </PopoverBody>
             </PopoverContent>
         </Popover>

@@ -24,3 +24,13 @@ export const getPartners = async () => {
     const response = await instance.get(`/partners`)
     return response
 }
+
+export const createCheckoutOrder = async (order) => {
+    const response = await instance.post(`/orders/checkout`, order)
+    return response
+}
+
+export const createOrder = async (order) => {
+    const response = await instance.post(`/orders`, order)
+    return response
+}

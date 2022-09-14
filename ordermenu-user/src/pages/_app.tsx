@@ -6,9 +6,9 @@ import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux";
 
 import { customTheme } from "../styles/theme";
-import { Header } from "src/components/";
-import { wrapper } from "src/store/store";
-import { setAuthState } from "src/store/authSlice";
+import { Header } from "../components/";
+import { wrapper } from "../store/store";
+import { setAuthState } from "../store/authSlice";
 import { useEffect } from "react";
 import '../styles/styles.css'
 
@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (Cookies.get('accessToken')) {
       dispatch(setAuthState(true))
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <QueryClientProvider client={queryClient}>

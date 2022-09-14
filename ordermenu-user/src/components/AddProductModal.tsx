@@ -23,7 +23,7 @@ import {
     NumberInputField
 } from '@chakra-ui/react'
 import { useDispatch } from "react-redux";
-import { addProduct } from 'src/store/cartSlice';
+import { addProduct } from '../store/cartSlice';
 
 const AddProductModal = ({ product }) => {
     const dispatch = useDispatch()
@@ -34,6 +34,7 @@ const AddProductModal = ({ product }) => {
 
     const onSubmit = () => {
         dispatch(addProduct({ ...product, size: product?.sizes?.find(s => s.name === size), extra: product?.extra?.find(e => e.name === extra), quantity }))
+        onClose()
     }
 
     useEffect(() => {

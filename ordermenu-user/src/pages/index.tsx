@@ -1,4 +1,5 @@
-import Head from 'next/head';
+import { useEffect } from 'react'
+import { useRouter } from 'next/router';
 import {
   Box,
   Heading,
@@ -10,18 +11,26 @@ import {
   useColorModeValue,
   createIcon,
 } from '@chakra-ui/react';
+import Meta from '../components/Meta';
 
 export default function Home(props) {
+  const router = useRouter()
   console.log("Props -> ", props)
+
+  useEffect(() => {
+    const slug = sessionStorage.getItem("restaurantSlug")
+    const tableNumber = sessionStorage.getItem("tableNumber")
+
+    if (slug) {
+      router.push(`/restaurant/${slug}?tableNumber=${tableNumber}`)
+    }
+  }, [router])
+
+
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
+      <Meta title="It's Now Safe To Crave!" description="It's Now Safe To Crave!-
+We will help you with restaurant discovery, exclusive offers & things." url="https://ordermenu.live" />
       <Container maxW={'3xl'}>
         <Stack
           as={Box}

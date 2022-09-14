@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Cookies from 'js-cookie'
 
 import CheckoutModal from './CheckoutModal';
-import { selectIsAuthenticated, setAuthState } from 'src/store/authSlice';
+import { selectIsAuthenticated, setAuthState } from '../store/authSlice';
 import { useRouter } from 'next/router';
 
 export default function Header() {

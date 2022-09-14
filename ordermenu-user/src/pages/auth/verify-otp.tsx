@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from "react-redux";
 
 import { signin, verifyOtp } from '../../apis/';
-import { selectIsAuthenticated, setAuthState } from 'src/store/authSlice';
+import { selectIsAuthenticated, setAuthState } from '../../store/authSlice';
+import { Meta } from '../../components';
 
 const VerifyOtp = () => {
     const router = useRouter()
@@ -59,25 +60,28 @@ const VerifyOtp = () => {
     }
 
     return (
-        <Flex height="90vh" justify="center" align="center">
-            <Box bg={useColorModeValue('white', 'gray.800')} m={4} width={useBreakpointValue({ base: '100%', md: '24rem' })} p={useBreakpointValue({ base: 4, md: 8 })} borderRadius={8} shadow="sm">
-                <Text fontSize="lg" fontWeight="semibold">Have you received a verification code?
-                </Text>
-                <Text fontSize="xs" color="gray.500">We've sent you a verification code to your phone - {phone} <Button variant='ghost' size="xs" colorScheme='brand' onClick={resendOtp}>Resend</Button></Text>
-                <HStack my={4}>
-                    <PinInput type='number' onChange={e => setOtp(Number(e))} mask>
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                    </PinInput>
-                </HStack>
+        <>
+            <Meta title="Verify Otp" description="Verify your account | OrderMenu" url="https://ordermenu.live/auth/verify-otp" />
+            <Flex height="90vh" justify="center" align="center">
+                <Box bg={useColorModeValue('white', 'gray.800')} m={4} width={useBreakpointValue({ base: '100%', md: '24rem' })} p={useBreakpointValue({ base: 4, md: 8 })} borderRadius={8} shadow="sm">
+                    <Text fontSize="lg" fontWeight="semibold">Have you received a verification code?
+                    </Text>
+                    <Text fontSize="xs" color="gray.500">We've sent you a verification code to your phone - {phone} <Button variant='ghost' size="xs" colorScheme='brand' onClick={resendOtp}>Resend</Button></Text>
+                    <HStack my={4}>
+                        <PinInput type='number' onChange={e => setOtp(Number(e))} mask>
+                            <PinInputField />
+                            <PinInputField />
+                            <PinInputField />
+                            <PinInputField />
+                            <PinInputField />
+                            <PinInputField />
+                        </PinInput>
+                    </HStack>
 
-                <Button colorScheme='brand' disabled={String(otp).length !== 6} width="100%" onClick={onSubmit}>Submit</Button>
-            </Box>
-        </Flex >
+                    <Button colorScheme='brand' disabled={String(otp).length !== 6} width="100%" onClick={onSubmit}>Submit</Button>
+                </Box>
+            </Flex >
+        </>
     )
 }
 

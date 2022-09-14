@@ -7,3 +7,15 @@
   color: #ffffff;
   background: #10b981;
 }
+
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #10b981;
+}
+
+.chakra-tabs::-webkit-scrollbar {
+  display: none;
+}
