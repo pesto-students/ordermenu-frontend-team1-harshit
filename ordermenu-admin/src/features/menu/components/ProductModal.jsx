@@ -34,8 +34,6 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
   const [image, setImage] = useState(null)
   const { isOpen, onOpen, onClose } = useDisclosure(type === "EDIT" ? { isOpen: isEditing, onOpen: () => setIsEditing(true), onClose: () => setIsEditing(false) } : {})
 
-  console.log(sizes, extra)
-
   const ProductSchema = Yup.object().shape({
     name: Yup.string()
       .min(3, "Too Short!")
@@ -100,7 +98,6 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
               }}
               validationSchema={ProductSchema}
               onSubmit={(values, actions) => {
-                console.log("Values to be submitted =====> ", values, sizes, extra)
                 values.image = image
                 if (type === "EDIT") {
                   dispatch(updateProductAction({ productId: product._id, product: { ...values, sizes, extra } }))

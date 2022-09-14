@@ -69,7 +69,6 @@ const CategoryModal = ({ type, isEditing, setIsEditing, category }) => {
               validationSchema={CategorySchema}
               onSubmit={async (values, actions) => {
                 values.image = image
-                console.log("Values :", values)
                 if (type === "EDIT") {
                   dispatch(updateCategoryAction({ categoryId: category.id, category: values }))
                 } else {

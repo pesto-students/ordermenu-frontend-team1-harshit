@@ -15,10 +15,7 @@ export const fetchAllCategories = createAsyncThunk(
 
 export const addCategoryAction = createAsyncThunk(
   'category/addCategory',
-  async (category) => {
-    console.log("Add => ", category)
-    return await addCategory(category)
-  }
+  async (category) => await addCategory(category)
 )
 
 export const updateCategoryAction = createAsyncThunk(

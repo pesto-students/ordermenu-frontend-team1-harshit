@@ -12,8 +12,6 @@ const VerifyOtpPage = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  console.log("VOP ::: ", location.state._id)
-
   if (!location.state._id) {
     navigate('/')
   }
@@ -39,9 +37,10 @@ const VerifyOtpPage = () => {
             validationSchema={OtpSchema}
             onSubmit={async (values, actions) => {
               const response = await verifyOtp({ userId: location.state._id, otp: Number(values.otp) })
-              dispatch(setIsAuthenticated(true))
-              console.log("Values :", values, response)
-              navigate('/dashboard')
+              if (response) {
+                dispatch(setIsAuthenticated(true))
+                navigate('/dashboard')
+              }
             }}
           >
             {(props) => (

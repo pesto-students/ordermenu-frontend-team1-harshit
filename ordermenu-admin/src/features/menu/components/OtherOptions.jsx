@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react"
 
 const OtherOptions = ({ fieldName, options, setOptions }) => {
-  console.log("Options => ", options)
 
   const OptionSchema = Yup.object().shape({
     name: Yup.string()
@@ -34,20 +33,17 @@ const OtherOptions = ({ fieldName, options, setOptions }) => {
     }
   }
 
-  console.log(options)
-
   return (
     <Formik
       initialValues={{ name: "", price: "" }}
       validationSchema={OptionSchema}
       onSubmit={(values, actions) => {
         const index = options.findIndex(option => option.name === values.name)
+
         if (index < 0) {
-          console.log("Adding ")
           setOptions([...options, values])
           actions.resetForm()
         } else {
-          console.log("Errors ")
           actions.setErrors({
             name: "Option name already exist!"
           }
@@ -80,7 +76,6 @@ const OtherOptions = ({ fieldName, options, setOptions }) => {
                   }
                 >
                   <Input {...field} placeholder="Regular" />
-                  {console.log("Props : ", props)}
                   <FormErrorMessage>
                     {form.errors.name}
                   </FormErrorMessage>

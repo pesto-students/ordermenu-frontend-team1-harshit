@@ -8,7 +8,7 @@ import { deleteProductAction } from '../../../store/productSlice';
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch()
   const [isEditing, setIsEditing] = useState(false)
-  console.log("product => ", product)
+
   return (
     <Box bg="white" shadow='sm' borderRadius="0.5rem" p={4}>
       <Box position={'relative'}>

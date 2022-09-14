@@ -69,7 +69,6 @@ const RestaurantDetailsPage = () => {
             values.background = background;
 
             dispatch(updatePartnerAction({ partnerId: partner._id, partner: values }))
-            console.log("Values : ", values)
           }}
         >
           {(props) => (

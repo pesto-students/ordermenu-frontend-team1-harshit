@@ -43,7 +43,6 @@ const TableModal = () => {
               initialValues={{ number: "" }}
               validationSchema={TableSchema}
               onSubmit={async (values, actions) => {
-                console.log("Table => ", values)
                 dispatch(addTableAction(values))
                 onClose()
               }}

@@ -28,10 +28,8 @@ const Login = () => {
             initialValues={{ phone: '' }}
             validationSchema={LoginSchema}
             onSubmit={async (values, actions) => {
-              console.log("Values :", values)
               try {
                 const response = await signin(values)
-                console.log("Response :", response)
                 if (response._id) {
                   navigate('/verify-otp', { state: response })
                 }

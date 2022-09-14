@@ -12,7 +12,6 @@ export const fetchPartner = createAsyncThunk(
   'partner/fetchPartner',
   async () => {
     const response = await getPartnerDetails()
-    console.log("Thunk=> ", response)
     return response
   }
 )

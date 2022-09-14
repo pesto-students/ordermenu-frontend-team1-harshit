@@ -100,7 +100,6 @@ const Register = () => {
                 initialValues={{ name: '', tagline: '', description: '', address: '' }}
                 validationSchema={PartnerSchema}
                 onSubmit={async (values, actions) => {
-                  console.log("Values :", values)
                   setPartner(values)
                   setStep(2)
                 }}
@@ -161,6 +160,7 @@ const Register = () => {
                         colorScheme="green"
                         variant='ghost'
                         _hover={{ background: 'none' }}
+                        onClick={() => navigate('/login')}
                       >
                         Already have an account?
                       </Button>
@@ -185,10 +185,9 @@ const Register = () => {
                 initialValues={{ firstName: '', lastName: '', phone: '', email: '' }}
                 validationSchema={OwnerSchema}
                 onSubmit={async (values, actions) => {
-                  console.log("Values :", values)
                   try {
                     const response = await signup({ partner, user: values })
-                    console.log("Response :", response)
+
                     if (response.ownerId) {
                       setUserId(response.ownerId)
                       setStep(3)
@@ -272,10 +271,9 @@ const Register = () => {
                 initialValues={{ otp: '' }}
                 validationSchema={OtpSchema}
                 onSubmit={async (values, actions) => {
-                  console.log("Values :", values)
                   try {
                     const response = await verifyOtp({ userId, otp: Number(values.otp) })
-                    console.log("Response :", response)
+
                     if (response.access) {
                       dispatch(setIsAuthenticated(true))
                       navigate('/dashboard')

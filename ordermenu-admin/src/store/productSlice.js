@@ -16,7 +16,6 @@ export const fetchAllProducts = createAsyncThunk(
 export const addProductAction = createAsyncThunk(
   'product/addProduct',
   async (product) => {
-    console.log("Add => ", product)
     return await addProduct(product)
   }
 )

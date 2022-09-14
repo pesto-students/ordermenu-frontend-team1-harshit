@@ -11,7 +11,6 @@ const initialAuth = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      console.log("login case")
       return { ...state, userLoggedIn: true, userId: action.payload }
 
     case "USERDATA":
