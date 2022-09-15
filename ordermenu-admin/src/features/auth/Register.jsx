@@ -106,7 +106,7 @@ const Register = () => {
               >
                 {(props) => (
                   <Form>
-                    <Flex gap={4}>
+                    <Flex gap={4} flexDirection={{ base: "column", md: "row" }}>
                       <Field name="name">
                         {({ field, form }) => (
                           <FormControl
@@ -198,7 +198,7 @@ const Register = () => {
               >
                 {(props) => (
                   <Form>
-                    <Flex gap={4} >
+                    <Flex gap={4} flexDirection={{ base: "column", md: "row" }}>
                       <Field name="firstName">
                         {({ field, form }) => (
                           <FormControl
@@ -223,7 +223,7 @@ const Register = () => {
                       </Field>
                     </Flex>
 
-                    <Flex gap={4} mt={4}>
+                    <Flex gap={4} mt={4} flexDirection={{ base: "column", md: "row" }}>
                       <Field name="phone">
                         {({ field, form }) => (
                           <FormControl

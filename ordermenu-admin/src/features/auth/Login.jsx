@@ -19,9 +19,9 @@ const Login = () => {
 
   return (
     <Flex height='100vh'>
-      <Box width='50%' backgroundImage={"url('https://images.pexels.com/photos/2679501/pexels-photo-2679501.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')"} backgroundRepeat="no-repeat" backgroundSize="cover" objectFit='cover' objectPosition='center center' height='100%'>
+      <Box width={{ base: 'none', md: "50%" }} backgroundImage={"url('https://images.pexels.com/photos/2679501/pexels-photo-2679501.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')"} backgroundRepeat="no-repeat" backgroundSize="cover" objectFit='cover' objectPosition='center center' height='100%'>
       </Box>
-      <Flex justify='center' align='center' width='50%'>
+      <Flex justify='center' align='center' width={{ base: '100%', md: "50%" }} p={4}>
         <Box width={{ base: '100%', md: '20rem' }}>
           <Text fontSize='lg' fontWeight='bold' mb={4}>Welcome Back</Text>
           <Formik
@@ -81,7 +81,7 @@ const Login = () => {
           </Formik>
         </Box>
       </Flex>
-    </Flex>
+    </Flex >
   )
 }
 
