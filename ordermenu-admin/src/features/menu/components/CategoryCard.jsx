@@ -24,7 +24,7 @@ const CategoryCard = ({ name, description, image, id }) => {
 
   return (
     <>
-      <Box bg="white" shadow="sm" borderRadius="0.5rem" p={4}>
+      <Box bg="white" shadow="sm" borderRadius="0.5rem" p={4} width="100%" height="100%">
         <Box position={"relative"}>
           <AspectRatio ratio={4 / 3}>
             <Image
@@ -55,7 +55,7 @@ const CategoryCard = ({ name, description, image, id }) => {
         <Heading size="md" mt={4}>
           {name}
         </Heading>
-        <Text fontSize="sm" color="gray.500" mt={2}>
+        <Text fontSize="sm" color="gray.500" mt={2} noOfLines={2}>
           {description}
         </Text>
         <CategoryModal type="EDIT" isEditing={isEditing} setIsEditing={setIsEditing} category={{ name, description, image, id }} />

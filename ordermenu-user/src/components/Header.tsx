@@ -32,6 +32,7 @@ export default function Header() {
         dispatch(setAuthState(false))
     }
 
+
     return (
         <Box bg={useColorModeValue('white', 'gray.800')}
             color={useColorModeValue('gray.800', 'white')}>
@@ -62,15 +63,17 @@ export default function Header() {
                                     Sign In
                                 </Button>
                             </Link>
-                            <Link href="/auth/signup" passHref>
-                                <Button
-                                    fontSize={'sm'}
-                                    colorScheme={'brand'}
+                            <Box display={{ base: 'none', md: 'block' }}>
+                                <Link href="/auth/signup" passHref>
+                                    <Button
+                                        fontSize={'sm'}
+                                        colorScheme={'brand'}
 
-                                >
-                                    Sign Up
-                                </Button>
-                            </Link>
+                                    >
+                                        Sign Up
+                                    </Button>
+                                </Link>
+                            </Box>
 
                         </>
 
@@ -98,7 +101,7 @@ export default function Header() {
                                     />
                                 </MenuButton>
                                 <MenuList>
-                                    <MenuItem>Edit</MenuItem>
+                                    {/* <MenuItem>Edit</MenuItem> */}
                                     <MenuDivider />
                                     <MenuItem color="red.500" onClick={onLogout}>Log Out</MenuItem>
                                 </MenuList>

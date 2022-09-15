@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   return (
-    <Box bg="white" shadow='sm' borderRadius="0.5rem" p={4}>
+    <Box bg="white" shadow='sm' borderRadius="0.5rem" p={4} width="100%" height="100%">
       <Box position={'relative'}>
         <AspectRatio ratio={4 / 3}>
           <Image src={product?.image} alt={product?.name} borderRadius="0.5rem" objectFit={'cover'} objectPosition='center center' />
@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
         {product?.name}
       </Heading>
       <Text fontSize='lg' fontWeight='bold' mt={2}>₹ {product?.price}</Text>
-      <Text fontSize='sm' color='gray.500' mt={2}>{product?.description}</Text>
+      <Text fontSize='sm' color='gray.500' mt={2} noOfLines={2}>{product?.description}</Text>
       <ProductModal type="EDIT" isEditing={isEditing} setIsEditing={setIsEditing} product={product} />
     </Box >
   )

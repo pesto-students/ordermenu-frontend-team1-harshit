@@ -42,6 +42,8 @@ const AddProductModal = ({ product }) => {
         product?.extra?.length > 0 && setExtra(product?.extra[0]?.name)
     }, [product, setSize])
 
+    const imageSize = useBreakpointValue({ base: '6rem', md: '8rem' })
+
     return (
         <>
             <Button size="sm" colorScheme='brand' onClick={onOpen}>+ Add</Button>
@@ -52,7 +54,7 @@ const AddProductModal = ({ product }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Flex gap={4} mt={2}>
-                            <Image src={product?.image} width={useBreakpointValue({ base: '6rem', md: '8rem' })} height={useBreakpointValue({ base: '6rem', md: '8rem' })} alt={product?.name} borderRadius={8} />
+                            <Image src={product?.image} width={imageSize} minWidth={imageSize} minHeight={imageSize} height={imageSize} alt={product?.name} borderRadius={8} />
                             <Box>
                                 <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')}>{product?.name}</Text>
                                 <Text fontSize="sm" color='gray.500'>{product?.description}</Text>
@@ -92,7 +94,7 @@ const AddProductModal = ({ product }) => {
                                 <Button colorScheme='gray' onClick={() => setQuantity(oldValue => oldValue >= 20 ? 20 : oldValue + 1)}>+</Button>
                             </Flex>
                             <Flex gap={4}>
-                                <Button variant='outline' onClick={onClose}>Cancel</Button>
+                                <Button variant='outline' onClick={onClose} display={{ base: 'none', md: 'block' }}>Cancel</Button>
                                 <Button colorScheme='brand' onClick={onSubmit} >
                                     Add to Cart
                                 </Button>
