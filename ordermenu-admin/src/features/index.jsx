@@ -1,6 +1,0 @@
-export { default as DashboardPage } from "./dashboard/DashboardPage"
-export { default as OrdersPage } from "./orders/OrdersPage"
-export { default as RestaurantDetailsPage } from "./restaurant/RestaurantDetailsPage"
-export { default as SettingsPage } from "./settings/SettingsPage"
-export { default as CategoriesPage } from "./menu/CategoriesPage"
-export { default as ProductsPage } from "./menu/ProductsPage"
