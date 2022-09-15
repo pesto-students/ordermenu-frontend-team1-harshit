@@ -22,7 +22,7 @@ const Partner = ({ partner }) => {
             onOpen()
         }
         if (router?.query?.tableNumber) {
-            const tableId = partner.tables.find((table) => table.number === Number(router?.query?.tableNumber))?._id
+            const tableId = partner?.tables?.find((table) => table?.number === Number(router?.query?.tableNumber))?._id
             dispatch(setTableId(tableId))
             onClose()
         }
