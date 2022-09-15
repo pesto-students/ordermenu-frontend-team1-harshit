@@ -25,7 +25,6 @@ export default function Header() {
     const { pathname } = useRouter()
     const dispatch = useDispatch()
     const isAuthenticated = useSelector(selectIsAuthenticated);
-    console.log("Router -> ", pathname)
 
     const onLogout = () => {
         Cookies.remove("accessToken");

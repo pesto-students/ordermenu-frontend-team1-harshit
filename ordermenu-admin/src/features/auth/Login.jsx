@@ -74,7 +74,7 @@ const Login = () => {
                   _hover={{ background: 'none' }}
                   onClick={() => navigate('/register')}
                 >
-                  I don't have an account?'
+                  I don't have an account?
                 </Button>
               </Form>
             )}

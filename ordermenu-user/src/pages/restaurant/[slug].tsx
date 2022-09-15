@@ -14,8 +14,6 @@ const Partner = ({ partner }) => {
     const dispatch = useDispatch()
     const router = useRouter()
 
-    console.log("Router ::: ", router)
-
     useEffect(() => {
         dispatch(setPartner(partner))
         if (!router?.query?.tableNumber) {
@@ -62,7 +60,7 @@ const Partner = ({ partner }) => {
 }
 
 export async function getStaticPaths() {
-    return { paths: [], fallback: true }
+    return { paths: [], fallback: "blocking" }
 }
 
 export async function getStaticProps({ params }) {

@@ -23,7 +23,6 @@ const Signin = () => {
 
     const { mutate, isLoading } = useMutation(signup, {
         onSuccess: (data: any) => {
-            console.log("onSuccess : ", data)
             localStorage.setItem("userId", data._id)
             localStorage.setItem("phone", data.phone)
             router.push({

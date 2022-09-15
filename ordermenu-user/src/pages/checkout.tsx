@@ -67,7 +67,6 @@ const Checkout = () => {
                     products: orderedProduct(),
                     paymentInfo: res
                 })
-                console.log('RESPONSE ++++> ', response, res);
                 setPaymentSuccess(response)
             },
             notes: {

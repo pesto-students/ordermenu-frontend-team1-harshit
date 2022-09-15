@@ -203,7 +203,7 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
                       isLoading={props.isSubmitting}
                       onClick={() => props.submitForm()}
                     >
-                      {type === "EDIT" ? "Edit" : "Add "}
+                      {type === "EDIT" ? "Edit " : "Add "}
                       Product
                     </Button>
                   </Flex>

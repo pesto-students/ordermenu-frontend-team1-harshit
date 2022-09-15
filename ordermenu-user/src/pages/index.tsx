@@ -15,7 +15,6 @@ import Meta from '../components/Meta';
 
 export default function Home(props) {
   const router = useRouter()
-  console.log("Props -> ", props)
 
   useEffect(() => {
     const slug = sessionStorage.getItem("restaurantSlug")

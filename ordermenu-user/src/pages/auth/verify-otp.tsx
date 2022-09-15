@@ -32,7 +32,6 @@ const VerifyOtp = () => {
 
     const verifyOtpMutation = useMutation(verifyOtp, {
         onSuccess: (data: any) => {
-            console.log(data)
             dispatch(setAuthState(true))
             router.push({
                 pathname: "/"
