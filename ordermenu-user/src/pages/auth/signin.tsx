@@ -39,7 +39,9 @@ const Signin = () => {
 
     const validatePhone = (phone) => {
         const rePhoneNumber = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
-        rePhoneNumber.test(phone)
+        if (!rePhoneNumber.test(phone)) {
+            return "Please enter a valid phone number."
+        }
     }
 
 
@@ -51,10 +53,10 @@ const Signin = () => {
                     <Text fontSize="lg" fontWeight="semibold">Welcome Back</Text>
                     <Text fontSize="xs" color="gray.500">It's quick and easy</Text>
                     <Formik
-                        initialValues={{ phone: null }}
+                        initialValues={{ phone: '' }}
                         validationSchema={signinSchema}
                         onSubmit={(values, actions) => {
-                            mutate(values)
+                            mutate({ phone: (Number(values.phone)) })
                         }}
                     >
 
