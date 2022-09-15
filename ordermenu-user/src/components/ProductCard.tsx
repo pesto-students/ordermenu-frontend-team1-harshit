@@ -1,20 +1,21 @@
 import React from 'react'
 import { Box, Flex, Image, Text, useBreakpointValue, useColorModeValue } from '@chakra-ui/react'
+
 import { AddProductModal } from './'
 
-const ProductCard = () => {
+const ProductCard = ({ product }) => {
     return (
         <Flex p={4} gap={4}>
-            <Image src={'https://picsum.photos/200'} width={useBreakpointValue({ base: '8rem', md: '10rem' })} alt={''} borderRadius={8} />
+            <Image src={product?.image} width={useBreakpointValue({ base: '8rem', md: '10rem' })} height={useBreakpointValue({ base: '8rem', md: '10rem' })} alt={product?.name} borderRadius={8} />
 
             <Flex flexDirection='column' justify='space-between' align='end' width="100%">
                 <Box width="100%">
-                    <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')}>Bagel With Smoked Salmon</Text>
-                    <Text fontSize="sm" color='gray.500'>Bagel With Smoked Salmon</Text>
-                    <Text fontSize="sm" fontWeight='semibold' color='gray.500' mt={2}>₹ 420</Text>
+                    <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')} noOfLines={2}>{product?.name}</Text>
+                    <Text fontSize="sm" color='gray.500' noOfLines={2}>{product?.description}</Text>
+                    <Text fontSize="sm" fontWeight='semibold' color='gray.500' mt={2}>₹ {product?.price}</Text>
                 </Box>
                 <Box>
-                    <AddProductModal />
+                    <AddProductModal product={product} />
                 </Box>
             </Flex>
         </Flex >
