@@ -26,6 +26,7 @@ const CategoryModal = ({ type, isEditing, setIsEditing, category }) => {
   const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure(type === "EDIT" ? { isOpen: isEditing, onOpen: () => setIsEditing(true), onClose: () => setIsEditing(false) } : {})
   const [image, setImage] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const CategorySchema = Yup.object().shape({
     name: Yup.string()
@@ -39,11 +40,16 @@ const CategoryModal = ({ type, isEditing, setIsEditing, category }) => {
   })
 
   const onImageChange = async (event) => {
-    const tempFiles = event.target.files;
-    if (tempFiles && tempFiles[0]) {
-
-      const { url } = await uploadFile(tempFiles[0])
-      setImage(url)
+    try {
+      setIsLoading(true)
+      const tempFiles = event.target.files;
+      if (tempFiles && tempFiles[0]) {
+        const { url } = await uploadFile(tempFiles[0])
+        setImage(url)
+        setIsLoading(false)
+      }
+    } catch (error) {
+      setIsLoading(false)
     }
   }
 
@@ -141,7 +147,7 @@ const CategoryModal = ({ type, isEditing, setIsEditing, category }) => {
                     <Button
                       mt={4}
                       colorScheme="green"
-                      isLoading={props.isSubmitting}
+                      isLoading={props.isSubmitting || isLoading}
                       type="submit"
                     >
                       {type === "EDIT" ? "Edit" : "Add"} Category

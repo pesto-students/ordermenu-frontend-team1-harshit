@@ -32,7 +32,16 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
   const [sizes, setSizes] = useState([])
   const [extra, setExtra] = useState([])
   const [image, setImage] = useState(null)
-  const { isOpen, onOpen, onClose } = useDisclosure(type === "EDIT" ? { isOpen: isEditing, onOpen: () => setIsEditing(true), onClose: () => setIsEditing(false) } : {})
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { isOpen, onOpen, onClose } = useDisclosure(type === "EDIT" ? {
+    isOpen: isEditing, onOpen: () => setIsEditing(true), onClose: () => {
+      setIsEditing(false)
+      setSizes([]);
+      setExtra([]);
+      setImage(null);
+    }
+  } : {})
 
   const ProductSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,12 +61,20 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
 
 
   const onImageChange = async (event) => {
-    const tempFiles = event.target.files;
-    if (tempFiles && tempFiles[0]) {
-      const { url } = await uploadFile(tempFiles[0])
-      setImage(url)
+    try {
+      setIsLoading(true)
+      const tempFiles = event.target.files;
+      if (tempFiles && tempFiles[0]) {
+        const { url } = await uploadFile(tempFiles[0])
+        setImage(url)
+        setIsLoading(false)
+      }
+    } catch (error) {
+      setIsLoading(false)
     }
   }
+
+
 
   useEffect(() => {
     if (type === "EDIT") {
@@ -200,8 +217,13 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
                     </Button>
                     <Button
                       colorScheme="green"
-                      isLoading={props.isSubmitting}
-                      onClick={() => props.submitForm()}
+                      isLoading={props.isSubmitting || isLoading}
+                      onClick={() => {
+                        setSizes([]);
+                        setExtra([]);
+                        setImage(null)
+                        props.submitForm();
+                      }}
                     >
                       {type === "EDIT" ? "Edit " : "Add "}
                       Product

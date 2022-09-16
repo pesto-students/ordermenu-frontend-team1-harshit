@@ -4,9 +4,10 @@ import { Box, Flex, Image, Text, useBreakpointValue, useColorModeValue } from '@
 import { AddProductModal } from './'
 
 const ProductCard = ({ product }) => {
+    const imageSize = useBreakpointValue({ base: '8rem', md: '10rem' });
     return (
         <Flex p={4} gap={4}>
-            <Image src={product?.image} width={useBreakpointValue({ base: '8rem', md: '10rem' })} minWidth={useBreakpointValue({ base: '8rem', md: '10rem' })} height={useBreakpointValue({ base: '8rem', md: '10rem' })} minHeight={useBreakpointValue({ base: '8rem', md: '10rem' })}  alt={product?.name} borderRadius={8} />
+            <Image src={product?.image} width={imageSize} minWidth={imageSize} height={imageSize} minHeight={imageSize} objectFit="cover" objectPosition="center center" alt={product?.name} borderRadius={8} />
 
             <Flex flexDirection='column' justify='space-between' align='end' width="100%">
                 <Box width="100%">
@@ -17,6 +18,7 @@ const ProductCard = ({ product }) => {
                 <Box>
                     <AddProductModal product={product} />
                 </Box>
+
             </Flex>
         </Flex >
     )

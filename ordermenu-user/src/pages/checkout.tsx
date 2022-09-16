@@ -10,23 +10,25 @@ import {
     useColorModeValue,
     Divider,
 } from '@chakra-ui/react'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/router';
 
-import { selectProducts, selectTableId } from '../store/cartSlice'
+import { resetCart, selectProducts, selectTableId } from '../store/cartSlice'
 import { selectPartner } from '../store/partnerSlice'
 import { CartProductCard, Meta } from '../components/';
 import { selectIsAuthenticated } from '../store/authSlice';
 import { createCheckoutOrder, createOrder } from '../apis';
 
 const Checkout = () => {
-    const [paymentSuccess, setPaymentSuccess] = useState(null);
+    const dispatch = useDispatch()
     const router = useRouter()
     const Razorpay = useRazorpay();
     const partner = useSelector(selectPartner)
     const products = useSelector(selectProducts)
     const tableId = useSelector(selectTableId)
+    const [paymentSuccess, setPaymentSuccess] = useState(null);
     const isAuthenticated = useSelector(selectIsAuthenticated)
+
     const calculateTotal = (products) => {
         let total = 0;
         products.map((product) => { total += (product?.price + (product?.size?.price || 0) + (product?.extra?.price || 0)) * product?.quantity; })
@@ -58,7 +60,7 @@ const Checkout = () => {
             currency: order?.currency,
             name: partner?.name,
             description: partner?.name,
-            image: "https://order-menu.s3.ap-south-1.amazonaws.com/logo-ordermenu.svg",
+            image: partner?.image,
             order_id: order?.id,
             handler: async (res) => {
                 const response = await createOrder({
@@ -68,18 +70,19 @@ const Checkout = () => {
                     paymentInfo: res
                 })
                 setPaymentSuccess(response)
+                dispatch(resetCart({}))
             },
             notes: {
                 name: partner?.name
             },
             theme: {
-                color: "#3399cc",
+                color: "#34d399",
             },
         };
 
         const rzpay = new Razorpay(options);
         rzpay.open();
-    }, [Razorpay, partner?._id, orderedProduct, tableId, partner?.name]);
+    }, [Razorpay, partner?._id, orderedProduct, tableId, partner?.name, partner?.image, dispatch]);
 
 
     useEffect(() => {

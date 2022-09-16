@@ -14,7 +14,7 @@ import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import isEqual from 'lodash/isEqual'
 
-import { fetchAllOrders, selectOrder } from "../../store/orderSlice"
+import { addNewOrder, fetchAllOrders, selectNewOrders, selectOrder } from "../../store/orderSlice"
 import OrderTable from "./components/OrderTable"
 import { selectPartner } from "../../store/partnerSlice"
 import StatusRenderer from "./components/StatusRenderer"
@@ -25,6 +25,7 @@ const OrdersPage = () => {
   const dispatch = useDispatch()
   const [selectedTab, setSelectedTab] = useState(0)
   const { partner } = useSelector(selectPartner, isEqual)
+  const newOrders = useSelector(selectNewOrders, isEqual)
   const { isLoading, orders } = useSelector(selectOrder, isEqual)
 
   const getSelectedTab = (selectedTab) => {
@@ -44,11 +45,6 @@ const OrdersPage = () => {
     }
   }
 
-  useEffect(() => {
-    if (partner._id) {
-      dispatch(fetchAllOrders({ partnerId: partner?._id, sortBy: '-createdAt', limit: '10', page: '1', status: getSelectedTab(selectedTab) }))
-    }
-  }, [dispatch, partner._id, selectedTab])
 
   const columns = useMemo(() => [
     {
@@ -82,6 +78,34 @@ const OrdersPage = () => {
     totalPages: orders.totalPages
   }), [orders])
 
+  useEffect(() => {
+    if (selectedTab !== 1) {
+      if (partner._id) {
+        dispatch(fetchAllOrders({ partnerId: partner?._id, sortBy: '-createdAt', limit: '10', page: '1', status: getSelectedTab(selectedTab) }))
+      }
+    }
+  }, [dispatch, partner._id, selectedTab])
+
+  useEffect(() => {
+    const source = new EventSource(`https://api.ordermenu.store/api/v1/orders-subscribe`);
+
+    source.addEventListener('message', (e) => {
+      const data = JSON.parse(e.data);
+
+      if (data.type === "NEW_ORDER") {
+        dispatch(addNewOrder(data.data))
+      }
+    });
+
+    source.addEventListener('error', (e) => {
+      console.error('Error: ', e);
+    });
+
+    return () => {
+      source.close();
+    };
+  }, [dispatch]);
+
   return (
     <>
       <Breadcrumb spacing="0.5rem" separator={<FiChevronRight />}>
@@ -95,29 +119,43 @@ const OrdersPage = () => {
       <Tabs mt={2} colorScheme="green" onChange={value => setSelectedTab(value)}>
         <TabList >
           <Tab value="All">All</Tab>
+          <Tab value="New">New Orders</Tab>
           <Tab value="Pending">Pending</Tab>
           <Tab value="Accepted">Accepted</Tab>
           <Tab value="Completed">Completed</Tab>
           <Tab value="Cancelled">Cancelled</Tab>
         </TabList>
 
-        <Box mt={4}>
-          {
-            isLoading ? <Loader /> : <> {orders?.results?.length === 0 ? (
-              <Center>
-                <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
-                  Your shop does not have any orders
-                </Text>
-              </Center>
-            ) : (
+        {
+          selectedTab === 1 ? <Box mt={4}>
+            {
+              isLoading ? <Loader /> : <> {newOrders?.length === 0 ? (
+                <Center>
+                  <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
+                    Your shop does not have any new orders
+                  </Text>
+                </Center>
+              ) : (
+                <OrderTable columns={columns} data={newOrders} {...otherInfo} status={getSelectedTab(selectedTab)} partnerId={partner._id} footer={false} />
+              )}</>
+            }
+          </Box> :
 
-              <OrderTable columns={columns} data={data} {...otherInfo} status={getSelectedTab(selectedTab)} partnerId={partner._id} />
-            )}</>
-          }
-        </Box>
+            <Box mt={4}>
+              {
+                isLoading ? <Loader /> : <> {orders?.results?.length === 0 ? (
+                  <Center>
+                    <Text fontSize="xl" md="1" color="gray.400" mt={12} ml={2}>
+                      Your shop does not have any orders
+                    </Text>
+                  </Center>
+                ) : (
+                  <OrderTable columns={columns} data={data} {...otherInfo} status={getSelectedTab(selectedTab)} partnerId={partner._id} />
+                )}</>
+              }
+            </Box>
+        }
       </Tabs>
-
-
     </>
   )
 }

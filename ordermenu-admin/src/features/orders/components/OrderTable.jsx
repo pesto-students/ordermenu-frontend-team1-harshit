@@ -15,7 +15,7 @@ import { FiMoreHorizontal, FiChevronRight, FiChevronLeft } from 'react-icons/fi'
 import { fetchAllOrders, updateOrderStatusAction } from '../../../store/orderSlice'
 import { useDispatch } from 'react-redux'
 
-const OrderTable = ({ limit, page, totalResults, totalPages, columns, data, status, partnerId }) => {
+const OrderTable = ({ limit, page, totalResults, totalPages, columns, data, status, partnerId, footer = true }) => {
   const dispatch = useDispatch()
 
   const {
@@ -73,34 +73,35 @@ const OrderTable = ({ limit, page, totalResults, totalPages, columns, data, stat
                         </MenuList>
                       </Menu>
                     </Flex>}
-
                   </Td>
                 </Tr>
               )
             })
           }
         </Tbody>
-        <Tfoot bg="white">
-          <Tr>
-            <Th></Th>
-            <Th></Th>
-            <Th></Th>
-            <Th></Th>
-            <Th width="10rem">
-              <Flex justify={"flex-end"} align="center" gap={2}>
-                <Text>{1 + ((Number(page) - 1) * Number(limit))} - {Number(page) * Number(limit) < totalResults ? Number(page) * Number(limit) : totalResults}  of {totalResults}</Text>
-                <Flex gap={1}>
-                  <Button size="sm" onClick={fetchPreviousPageOrders} disabled={page === 1}>
-                    <FiChevronLeft />
-                  </Button>
-                  <Button size="sm" onClick={fetchNextPageOrders} disabled={page === totalPages}>
-                    <FiChevronRight />
-                  </Button>
+        {
+          footer && <Tfoot bg="white">
+            <Tr>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th width="10rem">
+                <Flex justify={"flex-end"} align="center" gap={2}>
+                  <Text>{1 + ((Number(page) - 1) * Number(limit))} - {Number(page) * Number(limit) < totalResults ? Number(page) * Number(limit) : totalResults}  of {totalResults}</Text>
+                  <Flex gap={1}>
+                    <Button size="sm" onClick={fetchPreviousPageOrders} disabled={page === 1}>
+                      <FiChevronLeft />
+                    </Button>
+                    <Button size="sm" onClick={fetchNextPageOrders} disabled={page === totalPages}>
+                      <FiChevronRight />
+                    </Button>
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Th>
-          </Tr>
-        </Tfoot>
+              </Th>
+            </Tr>
+          </Tfoot>
+        }
       </Table>
     </TableContainer>
   )

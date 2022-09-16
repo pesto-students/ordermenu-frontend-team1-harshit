@@ -54,7 +54,7 @@ const AddProductModal = ({ product }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Flex gap={4} mt={2}>
-                            <Image src={product?.image} width={imageSize} minWidth={imageSize} minHeight={imageSize} height={imageSize} alt={product?.name} borderRadius={8} />
+                            <Image src={product?.image} width={imageSize} minWidth={imageSize} minHeight={imageSize} height={imageSize} objectFit="cover" objectPosition="center center" alt={product?.name} borderRadius={8} />
                             <Box>
                                 <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')}>{product?.name}</Text>
                                 <Text fontSize="sm" color='gray.500'>{product?.description}</Text>
