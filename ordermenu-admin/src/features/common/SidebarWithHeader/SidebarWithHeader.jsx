@@ -267,11 +267,7 @@ const SidebarWithHeader = () => {
                 borderColor={useColorModeValue("gray.200", "gray.700")}
               >
                 <MenuItem
-                  onClick={() => {
-                    cookies.remove("accessToken");
-                    cookies.remove("refreshToeken");
-                    dispatch(setIsAuthenticated(false));
-                  }}
+                  onClick={signOutUser}
                   color='red.400'
                 >Sign out</MenuItem>
               </MenuList>
@@ -280,6 +276,17 @@ const SidebarWithHeader = () => {
         </HStack>
       </Flex>
     )
+  }
+
+  const signOutUser = () => {
+    cookies.remove("accessToken");
+    cookies.remove("refreshToeken");
+    Object.keys(cookies.get()).forEach(function (cookieName) {
+      var neededAttributes = { domain: ".ordermenu.store", secure: true };
+      cookies.remove(cookieName, neededAttributes);
+    });
+
+    dispatch(setIsAuthenticated(false));
   }
 
   return (
