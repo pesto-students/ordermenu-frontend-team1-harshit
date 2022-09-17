@@ -22,7 +22,9 @@ import { selectPartner } from "../store/partnerSlice"
 import { addNewOrder } from "../store/orderSlice";
 import { notification } from "../App";
 
-const socket = io.connect('https://api.ordermenu.store/api/v1')
+const socket = io('wss://api.ordermenu.store', {
+  reconnectionDelayMax: 10000
+})
 
 const BaseRoutes = () => {
   const dispatch = useDispatch()
