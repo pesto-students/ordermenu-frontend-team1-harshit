@@ -15,9 +15,8 @@ import {
     useColorModeValue,
     ModalHeader,
 } from '@chakra-ui/react'
-import ProductInfoCard from './ProductInfoCard'
+import CartProductCard from './CartProductCard'
 import { useDispatch } from 'react-redux'
-import { updateOrderStatusAction } from '../../../store/orderSlice'
 import StatusRenderer from './StatusRenderer'
 
 
@@ -70,7 +69,7 @@ const OrderDetailsModal = ({ order, isOrderOpen, setIsOrderOpen }) => {
                                     <Flex flexDirection="column" gap={2}>
 
                                         {
-                                            order?.products?.map((product) => <ProductInfoCard key={product?._id} product={product} />)
+                                            order?.products?.map((product) => <CartProductCard key={product?._id} product={product} />)
                                         }
                                     </Flex>
                                     <Divider my={4} />
@@ -88,12 +87,7 @@ const OrderDetailsModal = ({ order, isOrderOpen, setIsOrderOpen }) => {
                     </ModalBody>
 
                     <ModalFooter display={'flex'} gap={4}>
-                        {
-                            order?.status === "COMPLETED" ? '' : <Button colorScheme="red" variant="outline" onClick={() => dispatch(updateOrderStatusAction({ orderId: order?._id, status: "CANCELLED" }))}>Cancel</Button>
-                        }
-                        {
-                            order?.status === "PENDING" ? <Button onClick={() => dispatch(updateOrderStatusAction({ orderId: order?._id, status: "ACCEPTED" }))} colorScheme={'green'}>Accept</Button> : order?.status === "ACCEPTED" ? <Button onClick={() => dispatch(updateOrderStatusAction({ orderId: order?._id, status: "COMPLETED" }))} colorScheme={'green'}>Complete</Button> : ""
-                        }
+                        <Button>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

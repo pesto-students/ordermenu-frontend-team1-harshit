@@ -101,7 +101,7 @@ export default function Header() {
                                     />
                                 </MenuButton>
                                 <MenuList>
-                                    {/* <MenuItem>Edit</MenuItem> */}
+                                    <MenuItem>My Orders</MenuItem>
                                     <MenuDivider />
                                     <MenuItem color="red.500" onClick={onLogout}>Log Out</MenuItem>
                                 </MenuList>

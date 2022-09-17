@@ -42,6 +42,9 @@ const CheckoutModal = () => {
         return total
     }
 
+    const imageSize = useBreakpointValue({ base: '4rem', md: '5rem' })
+    const color = useColorModeValue('gray.800', 'white')
+
     return (
         <Popover placement='bottom-end' isOpen={isOpen}>
             <PopoverTrigger>
@@ -59,14 +62,16 @@ const CheckoutModal = () => {
             <PopoverContent p={2} width={useBreakpointValue({ base: '90vw', md: '28rem' })}>
                 <PopoverCloseButton onClick={onClose} />
                 <PopoverBody>
-                    <Flex gap={4} align="center">
-                        <Image src={partner?.logo} width={useBreakpointValue({ base: '4rem', md: '5rem' })} height={useBreakpointValue({ base: '4rem', md: '5rem' })} alt={partner?.name} borderRadius={'50%'} />
-                        <Box>
-                            <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.800', 'white')}>{partner?.name}</Text>
-                            <Text fontSize="sm" color='gray.500'>{partner?.address}</Text>
-                        </Box>
-                    </Flex>
-                    <Divider my={4} />
+                    {
+                        partner?.name && <><Flex gap={4} align="center">
+                            <Image src={partner?.logo} width={imageSize} height={imageSize} alt={partner?.name} borderRadius={'50%'} />
+                            <Box>
+                                <Text fontSize="lg" fontWeight="semibold" color={color}>{partner?.name}</Text>
+                                <Text fontSize="sm" color='gray.500'>{partner?.address}</Text>
+                            </Box>
+                        </Flex>
+                            <Divider my={4} />
+                        </>}
 
                     {
                         products?.length > 0 ? <><Flex flexDirection="column" gap={2}>
@@ -83,7 +88,7 @@ const CheckoutModal = () => {
                                 <Text fontWeight='semibold' width='20%' textAlign='right'>
                                     ₹ {calculateTotal(products)}
                                 </Text>
-                            </Flex></> : <Flex><Text>Your cart is empty.</Text></Flex>
+                            </Flex></> : <Flex my={4}><Text>Your cart is empty.</Text></Flex>
                     }
 
                     <Button width='100%' mt={4} colorScheme='brand' onClick={() => {

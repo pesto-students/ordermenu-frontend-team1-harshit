@@ -34,3 +34,8 @@ export const createOrder = async (order) => {
     const response = await instance.post(`/orders`, order)
     return response
 }
+
+export const getAllOrders = async (page = 1) => {
+    const response = await instance.get(`/orders?sortBy=-createdAt&limit=10&page=${page}`)
+    return response
+}
