@@ -13,14 +13,15 @@ import {
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import isEqual from 'lodash/isEqual'
+import { FiChevronRight } from "react-icons/fi"
 
-import { addNewOrder, fetchAllOrders, selectNewOrders, selectOrder } from "../../store/orderSlice"
+import { fetchAllOrders, selectNewOrders, selectOrder } from "../../store/orderSlice"
 import OrderTable from "./components/OrderTable"
 import { selectPartner } from "../../store/partnerSlice"
 import StatusRenderer from "./components/StatusRenderer"
-import { FiChevronRight } from "react-icons/fi"
 import Loader from "../common/Loader/Loader"
-import { notification } from "../../App"
+
+
 
 const OrdersPage = () => {
   const dispatch = useDispatch()
@@ -86,34 +87,6 @@ const OrdersPage = () => {
       }
     }
   }, [dispatch, partner._id, selectedTab])
-
-  useEffect(() => {
-    const source = new EventSource(`https://api.ordermenu.store/api/v1/orders-subscribe`);
-
-    source.addEventListener('message', (e) => {
-      const data = JSON.parse(e.data);
-
-      if (data.type === "NEW_ORDER") {
-        const order = data.data;
-        dispatch(addNewOrder(order))
-        notification({
-          title: `${order?.user?.name} ordered!`,
-          description: `${order?.products?.map(product => `${product.name},`)}`,
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-    });
-
-    source.addEventListener('error', (e) => {
-      console.error('Error: ', e);
-    });
-
-    return () => {
-      source.close();
-    };
-  }, [dispatch]);
 
   return (
     <>
