@@ -6,7 +6,6 @@ import { Container } from '../components'
 import OrderTable from '../components/OrderTable'
 import StatusRenderer from '../components/StatusRenderer'
 
-
 const MyOrders = () => {
     const {
         isLoading,
@@ -66,9 +65,8 @@ const MyOrders = () => {
             <Text fontSize="lg" fontWeight="semibold" mb={4}>My Orders</Text>
             {orders && <OrderTable columns={columns} data={orders} />}
             {hasNextPage && <Flex justify="center" mt={4}>
-                <Button onClick={fetchNextPage} colorScheme="green" isLoading={isFetching && !isFetchingNextPage}>Load More</Button>
+                <Button onClick={() => fetchNextPage()} colorScheme="green" isLoading={isFetching && !isFetchingNextPage}>Load More</Button>
             </Flex>}
-            <div>{isFetching && !isFetchingNextPage ? 'Fetching...' : null}</div>
         </Container>
     )
 }

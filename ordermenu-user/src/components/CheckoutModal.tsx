@@ -59,7 +59,7 @@ const CheckoutModal = () => {
                     {products?.length > 0 && <Badge colorScheme='red' variant='solid' minW={5} minH={5} position="absolute" top={-0.5} right={0} borderRadius="100%" display='flex' justifyContent="center" alignItems="center">{products?.length}</Badge>}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent p={2} width={useBreakpointValue({ base: '90vw', md: '28rem' })}>
+            <PopoverContent p={2} ml={2} width={useBreakpointValue({ base: '90vw', md: '28rem' })}>
                 <PopoverCloseButton onClick={onClose} />
                 <PopoverBody>
                     {

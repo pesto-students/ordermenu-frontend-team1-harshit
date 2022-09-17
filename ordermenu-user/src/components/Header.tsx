@@ -35,9 +35,9 @@ export default function Header() {
 
     return (
         <Box bg={useColorModeValue('white', 'gray.800')}
-            color={useColorModeValue('gray.800', 'white')}>
+            color={useColorModeValue('gray.800', 'white')} position="fixed" top="0" width="100%" zIndex={999}>
             <Flex
-                minH={'60px'}
+                height={'4rem'}
                 py={{ base: 2 }}
                 borderBottom={1}
                 borderStyle={'solid'}
@@ -63,7 +63,7 @@ export default function Header() {
                                     Sign In
                                 </Button>
                             </Link>
-                            <Box display={{ base: 'none', md: 'block' }}>
+                            <Box display={{ base: pathname.includes('auth') ? 'block' : 'none', md: 'block' }}>
                                 <Link href="/auth/signup" passHref>
                                     <Button
                                         fontSize={'sm'}
@@ -101,7 +101,12 @@ export default function Header() {
                                     />
                                 </MenuButton>
                                 <MenuList>
-                                    <MenuItem>My Orders</MenuItem>
+
+                                    <Link href="/my-orders">
+                                        <MenuItem>
+                                            My Orders
+                                        </MenuItem>
+                                    </Link>
                                     <MenuDivider />
                                     <MenuItem color="red.500" onClick={onLogout}>Log Out</MenuItem>
                                 </MenuList>
@@ -110,7 +115,7 @@ export default function Header() {
                     }
 
                 </Stack>
-            </Flex>
+            </Flex >
         </Box >
     );
 }

@@ -12,6 +12,7 @@ import {
   createIcon,
 } from '@chakra-ui/react';
 import Meta from '../components/Meta';
+import Link from 'next/link';
 
 export default function Home(props) {
   const router = useRouter()
@@ -54,16 +55,18 @@ We will help you with restaurant discovery, exclusive offers & things." url="htt
             align={'center'}
             alignSelf={'center'}
             position={'relative'}>
-            <Button
-              colorScheme={'brand'}
-              bg={'brand.500'}
-              rounded={'full'}
-              px={6}
-              _hover={{
-                bg: 'brand.600',
-              }}>
-              Get me some food
-            </Button>
+            <Link href="/restaurant/burger-king">
+              <Button
+                colorScheme={'brand'}
+                bg={'brand.500'}
+                rounded={'full'}
+                px={6}
+                _hover={{
+                  bg: 'brand.600',
+                }}>
+                Get me some food
+              </Button>
+            </Link>
             <Box>
               <Icon
                 as={Arrow}

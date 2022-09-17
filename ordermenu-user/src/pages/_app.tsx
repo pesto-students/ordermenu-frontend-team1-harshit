@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools, ReactQueryDevtoolsPanel } from "react-query/devtools";
 import Cookies from 'js-cookie'
@@ -26,7 +26,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider resetCSS={true} theme={customTheme}>
         <Header />
-        <Component {...pageProps} />
+        <Box pt="4rem">
+          <Component {...pageProps} />
+        </Box>
       </ChakraProvider >
       <ReactQueryDevtools initialIsOpen />
     </QueryClientProvider >

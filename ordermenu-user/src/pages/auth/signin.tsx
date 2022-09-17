@@ -9,6 +9,7 @@ import { signin } from '../../apis/'
 import { signinSchema } from '../../validations';
 import { selectIsAuthenticated } from '../../store/authSlice';
 import { Meta } from '../../components';
+import Link from 'next/link';
 
 const Signin = () => {
     const router = useRouter()
@@ -75,6 +76,11 @@ const Signin = () => {
                             </Form>
                         )}
                     </Formik>
+                    <Flex justify="center" mt={4}>
+                        <Link href="/auth/signup">
+                            <Button variant='link' colorScheme="brand" _hover={{ textDecoration: 'none' }}>I don't have an account?</Button>
+                        </Link>
+                    </Flex>
                 </Box>
             </Flex>
         </>
