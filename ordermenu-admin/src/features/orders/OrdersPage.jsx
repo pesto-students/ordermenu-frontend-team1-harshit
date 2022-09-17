@@ -20,6 +20,7 @@ import { selectPartner } from "../../store/partnerSlice"
 import StatusRenderer from "./components/StatusRenderer"
 import { FiChevronRight } from "react-icons/fi"
 import Loader from "../common/Loader/Loader"
+import { notification } from "../../App"
 
 const OrdersPage = () => {
   const dispatch = useDispatch()
@@ -93,7 +94,15 @@ const OrdersPage = () => {
       const data = JSON.parse(e.data);
 
       if (data.type === "NEW_ORDER") {
-        dispatch(addNewOrder(data.data))
+        const order = data.data;
+        dispatch(addNewOrder(order))
+        notification({
+          title: `${order?.user?.name} ordered!`,
+          description: `${order?.products?.map(product => `${product.name},`)}`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
       }
     });
 
