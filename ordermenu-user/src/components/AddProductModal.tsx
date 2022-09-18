@@ -4,7 +4,6 @@ import {
     Modal,
     ModalOverlay,
     ModalContent,
-    ModalHeader,
     ModalFooter,
     ModalBody,
     ModalCloseButton,
@@ -18,12 +17,11 @@ import {
     RadioGroup,
     Stack,
     Radio,
-    Input,
-    NumberInput,
-    NumberInputField
+    Input
 } from '@chakra-ui/react'
 import { useDispatch } from "react-redux";
 import { addProduct } from '../store/cartSlice';
+import { notification } from '../pages/_app';
 
 const AddProductModal = ({ product }) => {
     const dispatch = useDispatch()
@@ -34,6 +32,12 @@ const AddProductModal = ({ product }) => {
 
     const onSubmit = () => {
         dispatch(addProduct({ ...product, size: product?.sizes?.find(s => s.name === size), extra: product?.extra?.find(e => e.name === extra), quantity }))
+        notification({
+            title: "Added to the cart.",
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+        })
         onClose()
     }
 

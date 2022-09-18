@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import { Box, ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider, createStandaloneToast } from "@chakra-ui/react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools, ReactQueryDevtoolsPanel } from "react-query/devtools";
 import Cookies from 'js-cookie'
@@ -12,9 +12,13 @@ import { setAuthState } from "../store/authSlice";
 import { useEffect } from "react";
 import '../styles/styles.css'
 
+const { ToastContainer, toast } = createStandaloneToast()
+
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
   const dispatch = useDispatch()
+
+
 
   useEffect(() => {
     if (Cookies.get('accessToken')) {
@@ -29,10 +33,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Box pt="4rem">
           <Component {...pageProps} />
         </Box>
+        <ToastContainer />
       </ChakraProvider >
       <ReactQueryDevtools initialIsOpen />
     </QueryClientProvider >
   );
 }
+
+export const notification = toast
 
 export default wrapper.withRedux(MyApp);

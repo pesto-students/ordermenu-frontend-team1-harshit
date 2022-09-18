@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useCallback } from 'react'
 import {
     Popover,
     PopoverTrigger,
@@ -21,9 +21,9 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import { FiShoppingCart } from 'react-icons/fi'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { selectProducts, selectTableId } from '../store/cartSlice'
+import { resetCart, selectProducts, selectTableId } from '../store/cartSlice'
 import { selectPartner } from '../store/partnerSlice'
 import { CartProductCard } from '.';
 import { useRouter } from 'next/router';
@@ -31,6 +31,7 @@ import { selectIsAuthenticated } from '../store/authSlice';
 
 const CheckoutModal = () => {
     const router = useRouter()
+    const dispatch = useDispatch()
     const tableId = useSelector(selectTableId)
     const partner = useSelector(selectPartner)
     const products = useSelector(selectProducts)
@@ -44,6 +45,14 @@ const CheckoutModal = () => {
 
     const imageSize = useBreakpointValue({ base: '4rem', md: '5rem' })
     const color = useColorModeValue('gray.800', 'white')
+
+    const setCart = useCallback((_slug, _products) => { localStorage.setItem(`${_slug}`, JSON.stringify(_products)) }, [partner?.slug, products])
+
+    useEffect(() => {
+        if (partner?.slug) {
+            setCart(partner?.slug, products)
+        }
+    }, [partner?.slug, products, setCart])
 
     return (
         <Popover placement='bottom-end' isOpen={isOpen}>
@@ -91,14 +100,21 @@ const CheckoutModal = () => {
                             </Flex></> : <Flex my={4}><Text>Your cart is empty.</Text></Flex>
                     }
 
-                    <Button width='100%' mt={4} colorScheme='brand' onClick={() => {
-                        if (isAuthenticated) {
-                            router.push('/checkout')
-                        } else {
-                            router.push('/auth/signin')
-                        }
-                        onClose()
-                    }} disabled={products?.length === 0 || !tableId}>Checkout</Button>
+                    <Flex gap={4}>
+                        <Button width='100%' mt={4} onClick={() => {
+                            localStorage.removeItem(`${partner?.slug}`)
+                            dispatch(resetCart({}))
+                            onClose()
+                        }} disabled={products?.length === 0 || !tableId}>Clear Cart</Button>
+                        <Button width='100%' mt={4} colorScheme='brand' onClick={() => {
+                            if (isAuthenticated) {
+                                router.push('/checkout')
+                            } else {
+                                router.push('/auth/signin')
+                            }
+                            onClose()
+                        }} disabled={products?.length === 0 || !tableId}>Checkout</Button>
+                    </Flex>
                 </PopoverBody>
             </PopoverContent>
         </Popover>

@@ -7,7 +7,7 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import { CategorizedProducts, HeroSection, Meta, ScrollToTabs } from "../../components/";
 import { getPartnerBySlug } from "../../apis";
 import { setPartner } from "../../store/partnerSlice";
-import { setTableId } from "../../store/cartSlice";
+import { reloadCart, setTableId } from "../../store/cartSlice";
 
 const Partner = ({ partner }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -28,7 +28,17 @@ const Partner = ({ partner }) => {
         sessionStorage.setItem("tableNumber", `${router?.query?.tableNumber}`)
     }, [dispatch, partner, router?.query?.tableNumber, router?.query?.slug, onOpen, onClose])
 
+    useEffect(() => {
+        if (partner?.slug) {
+            const cart = JSON.parse(localStorage.getItem(`${partner?.slug}`))
+            if (cart?.length > 0) {
+                dispatch(reloadCart(cart))
+            }
+        }
+    }, [partner?.slug, dispatch])
+
     const categorizedProducts = partner?.categories?.map(category => ({ name: category.name, products: partner?.menu?.filter((product) => product.category === category.name) }))
+
     return (
         <>
             <Meta title={partner?.name} description={partner?.name + " - " + partner?.tagline} url={`https://www.ordermenu.live/restaurant/${partner?.slug}`} />
