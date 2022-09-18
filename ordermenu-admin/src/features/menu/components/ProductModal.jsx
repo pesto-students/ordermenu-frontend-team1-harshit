@@ -221,7 +221,6 @@ const ProductModal = ({ type, isEditing, setIsEditing, product }) => {
                       onClick={() => {
                         setSizes([]);
                         setExtra([]);
-                        setImage(null)
                         props.submitForm();
                       }}
                     >
