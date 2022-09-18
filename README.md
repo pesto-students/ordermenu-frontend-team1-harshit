@@ -59,6 +59,7 @@ ordering food, and online payment.
 - Redux
 - Chakra UI
 - Formik & Yup
+- Javascript
 
 
 #### User
@@ -68,6 +69,7 @@ ordering food, and online payment.
 - Redux
 - Chakra UI
 - Formik & Yup
+- Typescript
 
 <!-- GETTING STARTED -->
 
