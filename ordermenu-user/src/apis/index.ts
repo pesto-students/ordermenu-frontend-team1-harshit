@@ -1,3 +1,4 @@
+import { notification } from '../pages/_app'
 import instance from './instance'
 
 export const signin = async (body: { phone: number }) => {
@@ -32,6 +33,12 @@ export const createCheckoutOrder = async (order) => {
 
 export const createOrder = async (order) => {
     const response = await instance.post(`/orders`, order)
+    notification({
+        title: "You have ordered successfully.",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+    })
     return response
 }
 

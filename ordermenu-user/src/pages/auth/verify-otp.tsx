@@ -23,7 +23,6 @@ const VerifyOtp = () => {
 
     const signinMutation = useMutation(signin, {
         onError: () => {
-            alert("there was an error")
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')
@@ -38,7 +37,6 @@ const VerifyOtp = () => {
             })
         },
         onError: () => {
-            alert("there was an error")
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')

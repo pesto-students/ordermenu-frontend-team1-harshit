@@ -10,6 +10,7 @@ import { signinSchema } from '../../validations';
 import { selectIsAuthenticated } from '../../store/authSlice';
 import { Meta } from '../../components';
 import Link from 'next/link';
+import { notification } from '../_app';
 
 const Signin = () => {
     const router = useRouter()
@@ -30,8 +31,15 @@ const Signin = () => {
                 pathname: "/auth/verify-otp"
             })
         },
-        onError: () => {
-            alert("there was an error")
+        onError: (err: any) => {
+            if (err?.response?.status === 404) {
+                notification({
+                    title: "You don't have an account. Please create one.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')

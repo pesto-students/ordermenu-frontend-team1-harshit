@@ -39,11 +39,9 @@ const BaseRoutes = () => {
 
   useEffect(() => {
     if (partner?._id) {
-      console.log("useEffect 2")
       socket.emit('join_channel', partner?._id)
 
       socket.on('new_order', ({ order }) => {
-        console.log("new Order => ", order)
         dispatch(addNewOrder(order))
         notification({
           title: `${order?.user?.name} ordered!`,

@@ -30,7 +30,6 @@ const Signin = () => {
             })
         },
         onError: () => {
-            alert("there was an error")
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')
