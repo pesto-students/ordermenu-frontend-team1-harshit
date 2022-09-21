@@ -32,14 +32,6 @@ const Signin = () => {
             })
         },
         onError: (err: any) => {
-            if (err?.response?.status === 404) {
-                notification({
-                    title: "You don't have an account. Please create one.",
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                })
-            }
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')
