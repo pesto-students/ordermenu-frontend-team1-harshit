@@ -25,7 +25,7 @@ const Login = () => {
         <Box width={{ base: '100%', md: '20rem' }}>
           <Text fontSize='lg' fontWeight='bold' mb={4}>Welcome Back</Text>
           <Formik
-            initialValues={{ phone: '' }}
+            initialValues={{ phone: '9879879879' }}
             validationSchema={LoginSchema}
             onSubmit={async (values, actions) => {
               try {

@@ -54,7 +54,7 @@ const Signin = () => {
                     <Text fontSize="lg" fontWeight="semibold">Welcome Back</Text>
                     <Text fontSize="xs" color="gray.500">It's quick and easy</Text>
                     <Formik
-                        initialValues={{ phone: '' }}
+                        initialValues={{ phone: '8989475132' }}
                         validationSchema={signinSchema}
                         onSubmit={(values, actions) => {
                             mutate({ phone: (Number(values.phone)) })

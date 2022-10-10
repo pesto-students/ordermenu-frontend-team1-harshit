@@ -33,7 +33,7 @@ const VerifyOtpPage = () => {
         <Box width={{ base: '100%', md: '20rem' }} p={4} >
           <Text fontSize='xl' fontWeight='bold' mb={4}>Welcome Back</Text>
           <Formik
-            initialValues={{ otp: '' }}
+            initialValues={{ otp: '123456' }}
             validationSchema={OtpSchema}
             onSubmit={async (values, actions) => {
               const response = await verifyOtp({ userId: location.state._id, otp: Number(values.otp) })
@@ -54,7 +54,7 @@ const VerifyOtpPage = () => {
                       <Text fontSize="xs" color='gray.500' mb={2}>We've sent you an otp on your phone. <Button size='xs' variant='link' colorScheme='green' onClick={() => signin({ phone: location.state.phone })}>Resend</Button> </Text>
                       <HStack>
                         <PinInput onChange={(val) =>
-                          form.setFieldValue(field.name, val)} type='number'>
+                          form.setFieldValue(field.name, val)} type='number' defaultValue='123456'>
                           <PinInputField />
                           <PinInputField />
                           <PinInputField />
