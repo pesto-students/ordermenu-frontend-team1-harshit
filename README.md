@@ -124,7 +124,9 @@ First clone the repo and then perform the below steps
 
 For User
 
-Live Link - https://www.ordermenu.store?burger-king?tableNumber=1
+Live Link
+Admin - https://admin.ordermenu.store/
+User - https://www.ordermenu.store/restaurant/burger-king?tableNumber=1
 
 Phone - 8989475132
 Otp   - 123456
