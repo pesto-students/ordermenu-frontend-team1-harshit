@@ -9,6 +9,8 @@ import { signin } from '../../apis/'
 import { signinSchema } from '../../validations';
 import { selectIsAuthenticated } from '../../store/authSlice';
 import { Meta } from '../../components';
+import Link from 'next/link';
+import { notification } from '../_app';
 
 const Signin = () => {
     const router = useRouter()
@@ -29,8 +31,7 @@ const Signin = () => {
                 pathname: "/auth/verify-otp"
             })
         },
-        onError: () => {
-            alert("there was an error")
+        onError: (err: any) => {
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')
@@ -53,7 +54,7 @@ const Signin = () => {
                     <Text fontSize="lg" fontWeight="semibold">Welcome Back</Text>
                     <Text fontSize="xs" color="gray.500">It's quick and easy</Text>
                     <Formik
-                        initialValues={{ phone: '' }}
+                        initialValues={{ phone: '8989475132' }}
                         validationSchema={signinSchema}
                         onSubmit={(values, actions) => {
                             mutate({ phone: (Number(values.phone)) })
@@ -75,6 +76,11 @@ const Signin = () => {
                             </Form>
                         )}
                     </Formik>
+                    <Flex justify="center" mt={4}>
+                        <Link href="/auth/signup">
+                            <Button variant='link' colorScheme="brand" _hover={{ textDecoration: 'none' }}>I don't have an account?</Button>
+                        </Link>
+                    </Flex>
                 </Box>
             </Flex>
         </>

@@ -1,9 +1,11 @@
 import React from "react"
-import { Box, ChakraProvider } from "@chakra-ui/react"
+import { Box, ChakraProvider, createStandaloneToast } from "@chakra-ui/react"
 import { BrowserRouter } from "react-router-dom"
 import { AuthProvider } from "./context/AuthContext"
 
 import BaseRoutes from "./routes"
+
+const { ToastContainer, toast } = createStandaloneToast()
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
         <AuthProvider>
           <Box bg='gray.50' minHeight='100vh'>
             <BaseRoutes />
+            <ToastContainer />
           </Box>
         </AuthProvider>
       </ChakraProvider>
@@ -19,4 +22,5 @@ function App() {
   )
 }
 
+export const notification = toast;
 export default App

@@ -4,8 +4,8 @@ import { HYDRATE } from "next-redux-wrapper";
 
 // create a slice 
 export interface CartState {
-    products: any[],
-    tableId: number
+    products: any[];
+    tableId: number;
 }
 
 // Initial state
@@ -30,6 +30,13 @@ export const cartSlice = createSlice({
             state.tableId = action.payload
         },
 
+        resetCart(state) {
+            state.products = []
+        },
+
+        reloadCart(state, { payload }) {
+            state.products = payload
+        },
         // Special reducer for hydrating the state. Special case for next-redux-wrapper
         extraReducers: {
             // @ts-ignore
@@ -44,7 +51,7 @@ export const cartSlice = createSlice({
     },
 });
 
-export const { addProduct, setTableId } = cartSlice.actions;
+export const { addProduct, setTableId, resetCart, reloadCart } = cartSlice.actions;
 
 export const selectProducts = (state: AppState) => state?.cart?.products;
 export const selectTableId = (state: AppState) => state?.cart?.tableId;

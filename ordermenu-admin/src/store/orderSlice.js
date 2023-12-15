@@ -16,7 +16,8 @@ const initialState = {
     isLoading: true,
     stat: {},
     error: false
-  }
+  },
+  newOrders: []
 };
 
 export const fetchAllOrders = createAsyncThunk(
@@ -38,7 +39,11 @@ export const updateOrderStatusAction = createAsyncThunk(
 export const orderSlice = createSlice({
   name: "order",
   initialState,
-  reducers: {},
+  reducers: {
+    addNewOrder: (state, { payload }) => {
+      state.newOrders.unshift(payload)
+    }
+  },
   extraReducers: {
     [fetchAllOrders.pending]: (state) => {
       state.isLoading = true
@@ -71,6 +76,8 @@ export const orderSlice = createSlice({
 });
 
 export const selectOrder = (state) => state?.order;
+export const selectNewOrders = (state) => state?.order.newOrders;
 export const selectStats = (state) => state?.order.stats;
 
+export const { addNewOrder } = orderSlice.actions;
 export default orderSlice.reducer;

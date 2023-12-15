@@ -12,7 +12,7 @@ const VerifyOtp = () => {
     const router = useRouter()
     const queryClient = useQueryClient();
     const dispatch = useDispatch()
-    const [otp, setOtp] = useState<number>();
+    const [otp, setOtp] = useState<number>(123456);
     const isAuthenticated = useSelector(selectIsAuthenticated)
 
     useEffect(() => {
@@ -23,7 +23,6 @@ const VerifyOtp = () => {
 
     const signinMutation = useMutation(signin, {
         onError: () => {
-            alert("there was an error")
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')
@@ -32,14 +31,12 @@ const VerifyOtp = () => {
 
     const verifyOtpMutation = useMutation(verifyOtp, {
         onSuccess: (data: any) => {
-            console.log(data)
             dispatch(setAuthState(true))
             router.push({
                 pathname: "/"
             })
         },
         onError: () => {
-            alert("there was an error")
         },
         onSettled: () => {
             queryClient.invalidateQueries('create')
@@ -68,7 +65,7 @@ const VerifyOtp = () => {
                     </Text>
                     <Text fontSize="xs" color="gray.500">We've sent you a verification code to your phone - {phone} <Button variant='ghost' size="xs" colorScheme='brand' onClick={resendOtp}>Resend</Button></Text>
                     <HStack my={4}>
-                        <PinInput type='number' onChange={e => setOtp(Number(e))} mask>
+                        <PinInput type='number' onChange={e => setOtp(Number(e))} mask defaultValue='123456'>
                             <PinInputField />
                             <PinInputField />
                             <PinInputField />

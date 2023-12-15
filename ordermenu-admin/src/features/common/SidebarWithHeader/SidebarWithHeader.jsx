@@ -17,8 +17,10 @@ import {
   MenuItem,
   MenuList,
   Image,
+  Button,
 } from "@chakra-ui/react"
-import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi"
+import { FiMenu, FiChevronDown } from "react-icons/fi"
+import { RiLogoutCircleLine } from "react-icons/ri"
 import {
   RiShoppingCart2Line,
   RiHome4Line,
@@ -96,6 +98,10 @@ const SidebarWithHeader = () => {
             {link.name}
           </NavItem>
         ))}
+
+        <Button leftIcon={<RiLogoutCircleLine />} iconSpacing={4} pos="absolute" bottom="1.5rem" mx="8" variant="link" colorScheme="red" color="red.400" _hover={{ textDecoration: 'none' }} onClick={signOutUser} >
+          Sign Out
+        </Button>
       </Box>
     )
   }
@@ -235,12 +241,12 @@ const SidebarWithHeader = () => {
         </Text>
 
         <HStack spacing={{ base: "0", md: "6" }}>
-          <IconButton
+          {/* <IconButton
             size="lg"
             variant="ghost"
             aria-label="open menu"
             icon={<FiBell />}
-          />
+          /> */}
           <Flex alignItems={"center"}>
             <Menu>
               <MenuButton
@@ -267,11 +273,7 @@ const SidebarWithHeader = () => {
                 borderColor={useColorModeValue("gray.200", "gray.700")}
               >
                 <MenuItem
-                  onClick={() => {
-                    cookies.remove("accessToken");
-                    cookies.remove("refreshToeken");
-                    dispatch(setIsAuthenticated(false));
-                  }}
+                  onClick={signOutUser}
                   color='red.400'
                 >Sign out</MenuItem>
               </MenuList>
@@ -280,6 +282,15 @@ const SidebarWithHeader = () => {
         </HStack>
       </Flex>
     )
+  }
+
+  const signOutUser = () => {
+    Object.keys(cookies.get()).forEach(function (cookieName) {
+      var neededAttributes = { domain: ".ordermenu.store", secure: true };
+      cookies.remove(cookieName, neededAttributes);
+    });
+
+    dispatch(setIsAuthenticated(false));
   }
 
   return (

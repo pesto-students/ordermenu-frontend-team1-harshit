@@ -7,6 +7,20 @@ import { deleteTableAction } from '../../../store/tableSlice';
 
 const TableCard = ({ table }) => {
   const dispatch = useDispatch()
+
+  async function downloadImage(imageSrc) {
+    const image = await fetch(imageSrc)
+    const imageBlog = await image.blob()
+    const imageURL = URL.createObjectURL(imageBlog)
+
+    const link = document.createElement('a')
+    link.href = imageURL
+    link.download = `qr-${table?.number}.png`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <Box bg="white" shadow='sm' borderRadius="0.5rem" p={4}>
       <Box position={'relative'}>
@@ -24,7 +38,7 @@ const TableCard = ({ table }) => {
               cursor={'pointer'}
             />
             <MenuList position="absolute" right={'-1rem'} top="1.5rem">
-              <MenuItem icon={<FiDownload />}>
+              <MenuItem icon={<FiDownload />} onClick={() => downloadImage(table?.qrCode)}>
                 Download
               </MenuItem>
               <MenuItem icon={<FiTrash2 />} color='red.500' onClick={() => dispatch(deleteTableAction(table?._id))}>

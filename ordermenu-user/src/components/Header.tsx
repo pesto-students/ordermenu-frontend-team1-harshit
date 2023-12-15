@@ -25,7 +25,6 @@ export default function Header() {
     const { pathname } = useRouter()
     const dispatch = useDispatch()
     const isAuthenticated = useSelector(selectIsAuthenticated);
-    console.log("Router -> ", pathname)
 
     const onLogout = () => {
         Cookies.remove("accessToken");
@@ -33,11 +32,12 @@ export default function Header() {
         dispatch(setAuthState(false))
     }
 
+
     return (
         <Box bg={useColorModeValue('white', 'gray.800')}
-            color={useColorModeValue('gray.800', 'white')}>
+            color={useColorModeValue('gray.800', 'white')} position="fixed" top="0" width="100%" zIndex={999}>
             <Flex
-                minH={'60px'}
+                height={'4rem'}
                 py={{ base: 2 }}
                 borderBottom={1}
                 borderStyle={'solid'}
@@ -63,15 +63,17 @@ export default function Header() {
                                     Sign In
                                 </Button>
                             </Link>
-                            <Link href="/auth/signup" passHref>
-                                <Button
-                                    fontSize={'sm'}
-                                    colorScheme={'brand'}
+                            <Box display={{ base: pathname.includes('auth') ? 'block' : 'none', md: 'block' }}>
+                                <Link href="/auth/signup" passHref>
+                                    <Button
+                                        fontSize={'sm'}
+                                        colorScheme={'brand'}
 
-                                >
-                                    Sign Up
-                                </Button>
-                            </Link>
+                                    >
+                                        Sign Up
+                                    </Button>
+                                </Link>
+                            </Box>
 
                         </>
 
@@ -99,7 +101,12 @@ export default function Header() {
                                     />
                                 </MenuButton>
                                 <MenuList>
-                                    <MenuItem>Edit</MenuItem>
+
+                                    <Link href="/my-orders">
+                                        <MenuItem>
+                                            My Orders
+                                        </MenuItem>
+                                    </Link>
                                     <MenuDivider />
                                     <MenuItem color="red.500" onClick={onLogout}>Log Out</MenuItem>
                                 </MenuList>
@@ -108,7 +115,7 @@ export default function Header() {
                     }
 
                 </Stack>
-            </Flex>
+            </Flex >
         </Box >
     );
 }
